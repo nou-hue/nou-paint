@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #f6f1e6;
+  --color-surface: #fbf7ee;
+  --color-paper: #f8f3e9;
+  --color-ink: #3a3228;
+  --color-muted: #8a7d6c;
+  --color-subtle: #b3a792;
+  --color-line: #e4d9c6;
+  --color-gold: #b08a45;
+  --color-gold-deep: #8c6a2f;
+  --color-accent: #b08a45;
+  --color-accent-fg: #fbf7ee;
+  --color-rose: #d4a39a;
+  --color-sage: #8aa090;
+  --color-teal: #6e8b82;
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-script: "Great Vibes", "Cormorant Garamond", cursive;
+  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --shadow-border: 0 0 0 1px rgb(58 50 40 / 0.06), 0 10px 28px -16px rgb(58 50 40 / 0.18);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html,
+  body,
+  #app {
+    min-height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    font-family: var(--font-display);
+  }
+  p {
+    text-wrap: pretty;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+.damask {
+  background-color: var(--color-bg);
+  background-image: radial-gradient(circle at 20% 10%, rgb(176 138 69 / 0.06), transparent 32%),
+    radial-gradient(circle at 80% 90%, rgb(176 138 69 / 0.05), transparent 28%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
