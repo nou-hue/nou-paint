@@ -125,47 +125,46 @@ function Gallery({ age, onSwitch }: { age: "child" | "adult"; onSwitch: () => vo
 
   return (
     <section className="mt-10">
-      <div className="mb-5 flex items-end justify-between">
-        <div>
-          <p className="text-sm text-muted">{age === "child" ? "Children · free" : "Adults · £1.99 to download"}</p>
-          <h2 className="font-display text-3xl">Pages</h2>
-        </div>
+      <div className="mb-2 text-center">
+        <h2 className="font-display text-4xl text-gold-deep">My Dreamy Pages</h2>
+        <p className="mt-1 text-sm text-muted">
+          {age === "child" ? "Children · play free" : "Adults · colour free, download £1.99"}
+        </p>
+      </div>
+      <div className="mb-5 flex justify-end">
         <button type="button" onClick={onSwitch} className="text-sm text-gold-deep underline-offset-4 hover:underline">
           Change age
         </button>
       </div>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {pages.map((page) =>
-          page.ready ? (
-            <Link
-              key={page.id}
-              to="/studio/$pageId"
-              params={{ pageId: page.id }}
-              className="overflow-hidden rounded-[24px] bg-surface shadow-[var(--shadow-border)]"
-            >
-              <img
-                src={page.art}
-                alt=""
-                className="aspect-square w-full object-cover outline outline-1 -outline-offset-1 outline-ink/10"
-              />
-              <div className="p-4">
-                <p className="text-xs tracking-wide text-gold uppercase">Sample</p>
-                <h3 className="font-display text-2xl">{page.title}</h3>
-                <p className="text-sm text-muted">{page.line}</p>
-              </div>
-            </Link>
-          ) : (
-            <div key={page.id} className="overflow-hidden rounded-[24px] bg-surface/80 shadow-[var(--shadow-border)]">
-              <div className="grid aspect-square place-items-center bg-paper">
-                <span className="text-sm text-subtle">Placeholder</span>
-              </div>
-              <div className="p-4">
-                <p className="text-xs tracking-wide text-subtle uppercase">Soon</p>
-                <h3 className="font-display text-2xl text-muted">{page.title}</h3>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {pages.map((page) => (
+          <Link
+            key={page.id}
+            to="/studio/$pageId"
+            params={{ pageId: page.id }}
+            className="overflow-hidden rounded-[24px] bg-surface shadow-[var(--shadow-border)]"
+          >
+            <img
+              src={page.art}
+              alt=""
+              className="aspect-[16/9] w-full object-cover outline outline-1 -outline-offset-1 outline-ink/10"
+            />
+            <div className="p-4">
+              <h3 className="font-display text-2xl">{page.title}</h3>
+              <p className="mt-0.5 text-sm text-muted">{page.line}</p>
+              <div className="mt-3 flex items-center justify-between">
+                <span className="rounded-full bg-paper px-2.5 py-1 text-xs text-gold-deep">
+                  {page.difficulty === "easy" ? "Easy" : "Dreamy"}
+                </span>
+                <span className="flex gap-1">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <span key={i} className={cn("size-1.5 rounded-full", i === 0 ? "bg-gold" : "bg-line")} />
+                  ))}
+                </span>
               </div>
             </div>
-          ),
-        )}
+          </Link>
+        ))}
         <button
           type="button"
           className={cn(
@@ -187,7 +186,7 @@ function Gallery({ age, onSwitch }: { age: "child" | "adult"; onSwitch: () => vo
         >
           <p className="text-xs tracking-wide text-gold uppercase">Your image</p>
           <h3 className="font-display text-2xl">Upload</h3>
-          <p className="mt-1 text-sm text-muted">Paint freeform or mosaic.</p>
+          <p className="mt-1 text-sm text-muted">Turns any photo into a numbered grid.</p>
         </button>
       </div>
     </section>

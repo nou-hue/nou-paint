@@ -25,7 +25,7 @@ export const useAppStore = create<AppStore>()(
     (set) => ({
       age: null,
       setAge: (age) => set({ age }),
-      style: "freeform",
+      style: "mosaic",
       setStyle: (style) => set({ style }),
       tool: "fill",
       setTool: (tool) => set({ tool }),

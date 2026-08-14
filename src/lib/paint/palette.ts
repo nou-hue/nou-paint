@@ -10,8 +10,6 @@ export const STUDIO_PALETTE = [
   { id: 9, hex: "#3a3228", name: "Ink" },
 ] as const;
 
-export type PaletteColor = (typeof STUDIO_PALETTE)[number];
-
 export function hexToRgb(hex: string): [number, number, number] {
   const h = hex.replace("#", "");
   return [
@@ -19,4 +17,18 @@ export function hexToRgb(hex: string): [number, number, number] {
     parseInt(h.slice(2, 4), 16),
     parseInt(h.slice(4, 6), 16),
   ];
+}
+
+export function rgbToHex(r: number, g: number, b: number): string {
+  return (
+    "#" +
+    [r, g, b]
+      .map((n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, "0"))
+      .join("")
+  );
+}
+
+export function contrastInk(hex: string) {
+  const [r, g, b] = hexToRgb(hex);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 160 ? "#3a3228" : "#fbf7ee";
 }
