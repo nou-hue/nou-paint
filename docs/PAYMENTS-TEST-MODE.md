@@ -5,7 +5,9 @@ Status: **test mode only, draft.** No live keys. Do not promote to production un
 ## What changed from the old build
 - The localStorage "£1.99 unlock" is gone. Nothing in the browser can grant access.
 - Premium (adult) page art lives in `private/pages/` and is bundled **server-only** (`src/lib/premium-assets.server.ts`). Public `/pages/preview/*.jpg` are small blurred teasers.
-- `GET /api/page/:id`: 404 for unknown/non-premium ids, 403 without entitlement, 200 `image/jpeg` with `Cache-Control: private, no-store` when entitled.
+- `GET /api/page/:id`: 404 for unknown/non-premium ids, 403 without entitlement, 200 `image/jpeg` with `Cache-Control: private, no-store` when entitled. `?kind=line` returns the line-art file (Freeform walls); any other `kind` is 400.
+- **Region (SVG) pages**: a premium page with `format: "regions"` is a single SVG in `private/pages/<id>.svg` (viewBox `0 0 800 800`, one `<path id data-n d>` per region), bundled server-only and returned by the same route as `image/svg+xml` with `private, no-store`, `nosniff` and `Content-Security-Policy: default-src 'none'; style-src 'unsafe-inline'; sandbox`. The client parses it as data (`parseRegionSvg`) and draws its own markup; the file is never inlined into the app bundle. **No premium SVG ships yet**; `tests/fixtures/chahar-bagh-DRAFT.svg` is a test fixture only and `tests/regions-assets.test.ts` fails if it reaches `public/`, `private/`, `src/` or the build.
+- Freeform walls (`lineSource`) are built from the page's line art, never the colour image. Square (mosaic) mode samples the colour image on purpose.
 - Google/X sign-in, Better Auth, the Grok preview bridge/PWA scaffold, multiplayer and the DB were removed, along with the committed preview client secret.
 - Kids pages: no third-party hosts (CSP `default-src 'self'` etc.), self-hosted `@fontsource` fonts, `Referrer-Policy: no-referrer`, no analytics, no data collected, parental gate (arithmetic, every time) before any purchase UI or external link.
 
