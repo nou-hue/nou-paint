@@ -32,3 +32,23 @@ export function contrastInk(hex: string) {
   const [r, g, b] = hexToRgb(hex);
   return 0.2126 * r + 0.7152 * g + 0.0722 * b > 160 ? "#3a3228" : "#fbf7ee";
 }
+
+/**
+ * Colours for region (SVG) pages: number n paints with REGION_PALETTE[n - 1].
+ * Up to 12 colours. "Sand" stands in for cream so a painted region never looks
+ * the same as the unpainted paper.
+ */
+export const REGION_PALETTE: readonly { id: number; hex: string; name: string }[] = [
+  { id: 1, hex: "#d4a39a", name: "Rose" },
+  { id: 2, hex: "#8aa090", name: "Sage" },
+  { id: 3, hex: "#6e8b82", name: "Teal" },
+  { id: 4, hex: "#c9bdd4", name: "Lilac" },
+  { id: 5, hex: "#e6d19a", name: "Sand" },
+  { id: 6, hex: "#c47a72", name: "Clay" },
+  { id: 7, hex: "#3d4d6b", name: "Dusk" },
+  { id: 8, hex: "#8a6a4a", name: "Bark" },
+  { id: 9, hex: "#3a3228", name: "Ink" },
+  { id: 10, hex: "#c9a24b", name: "Gold" },
+  { id: 11, hex: "#b9ad9a", name: "Stone" },
+  { id: 12, hex: "#6d7a4a", name: "Moss" },
+];

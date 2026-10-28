@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Heart, Leaf, Lock, Palette } from "lucide-react";
-import { pagesForAge } from "@/lib/paint/catalog";
+import { DIFFICULTY_LABEL, pagesForAge } from "@/lib/paint/catalog";
+import { RegionThumb } from "@/components/RegionPainter";
 import { useAppStore } from "@/lib/paint/store";
 import { cn } from "@/lib/utils";
 
@@ -135,11 +136,17 @@ function Gallery({ age, onSwitch }: { age: "child" | "adult"; onSwitch: () => vo
             className="overflow-hidden rounded-[24px] bg-surface shadow-[var(--shadow-border)]"
           >
             <div className="relative">
-              <img
-                src={page.art}
-                alt=""
-                className="aspect-[16/9] w-full object-cover outline outline-1 -outline-offset-1 outline-ink/10"
-              />
+              {page.regions ? (
+                <div className="aspect-[16/9] w-full overflow-hidden bg-paper outline outline-1 -outline-offset-1 outline-ink/10">
+                  <RegionThumb regions={page.regions} className="h-full w-full object-cover" />
+                </div>
+              ) : (
+                <img
+                  src={page.art}
+                  alt=""
+                  className="aspect-[16/9] w-full object-cover outline outline-1 -outline-offset-1 outline-ink/10"
+                />
+              )}
               {page.premium && (
                 <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-surface px-3 py-1 text-xs font-medium text-ink">
                   <Lock className="size-3" aria-hidden /> Paid pack
@@ -151,7 +158,7 @@ function Gallery({ age, onSwitch }: { age: "child" | "adult"; onSwitch: () => vo
               <p className="mt-0.5 text-sm text-muted">{page.line}</p>
               <div className="mt-3 flex items-center justify-between">
                 <span className="rounded-full bg-paper px-2.5 py-1 text-xs text-gold-deep">
-                  {page.difficulty === "easy" ? "Easy" : "Dreamy"}
+                  {DIFFICULTY_LABEL[page.difficulty]}
                 </span>
                 <span className="flex gap-1">
                   {Array.from({ length: 4 }).map((_, i) => (

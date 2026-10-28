@@ -3,16 +3,12 @@ import { Download, Grid2x2, Home, Lock, Minus, Pencil, Plus, Redo2, Undo2 } from
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FinishScreen } from "@/components/FinishScreen";
 import { GridPainter, type GridHandle } from "@/components/GridPainter";
+import { RegionPainter, type RegionPainterHandle } from "@/components/RegionPainter";
 import { UnlockDialog } from "@/components/UnlockDialog";
 import { pageById, type StudioPage } from "@/lib/paint/catalog";
-import {
-  drawContained,
-  floodFill,
-  floodSimilar,
-  labelColorFor,
-  loadImage,
-  paintedPercent,
-} from "@/lib/paint/engine";
+import { REGION_PALETTE } from "@/lib/paint/palette";
+import { colourCount, parseRegionSvg, type Region } from "@/lib/paint/regions";
+import { drawContained, floodFill, floodSimilar, labelColorFor, loadImage, paintedPercent } from "@/lib/paint/engine";
 import { fetchEntitlement } from "@/lib/pay/client";
 import { useAppStore } from "@/lib/paint/store";
 import { cn } from "@/lib/utils";
@@ -103,7 +99,10 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
   const [canRedo, setCanRedo] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
+  const isRegions = page?.format === "regions";
+  const [regions, setRegions] = useState<readonly Region[] | null>(page?.regions ?? null);
   const gridRef = useRef<GridHandle>(null);
+  const regionRef = useRef<RegionPainterHandle>(null);
   const lineRef = useRef<HTMLCanvasElement>(null);
   const paintRef = useRef<HTMLCanvasElement>(null);
   const walls = useRef<ImageData | null>(null);
@@ -115,13 +114,41 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
     setSelected(0);
   }, []);
 
+  const onRegionHistory = useCallback((h: { canUndo: boolean; canRedo: boolean }) => {
+    setCanUndo(h.canUndo);
+    setCanRedo(h.canRedo);
+  }, []);
+
   const syncFreeformHistory = () => {
     setCanUndo(history.current.length > 0);
     setCanRedo(redoStack.current.length > 0);
   };
 
+  // Region pages: free ones carry their regions; premium ones are fetched from the entitlement-checked route.
   useEffect(() => {
-    if (style !== "freeform") return;
+    if (!isRegions || !page) return;
+    if (page.regions) {
+      setRegions(page.regions);
+      return;
+    }
+    let gone = false;
+    setRegions(null);
+    setLoadError(false);
+    fetch(page.source, { credentials: "same-origin", cache: "no-store" })
+      .then(async (r) => {
+        if (!r.ok) throw new Error(String(r.status));
+        const parsed = parseRegionSvg(await r.text());
+        if (!parsed.ok) throw new Error(parsed.error);
+        if (!gone) setRegions(parsed.regions);
+      })
+      .catch(() => !gone && setLoadError(true));
+    return () => {
+      gone = true;
+    };
+  }, [isRegions, page]);
+
+  useEffect(() => {
+    if (isRegions || style !== "freeform") return;
     let gone = false;
     const line = lineRef.current;
     const paint = paintRef.current;
@@ -150,9 +177,13 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
     return () => {
       gone = true;
     };
-  }, [src, style]);
+  }, [src, style, isRegions]);
 
   function capture() {
+    if (isRegions) {
+      const svg = regionRef.current?.exportSvg();
+      return svg ? `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}` : "/pages/sample-done.jpg";
+    }
     if (style === "mosaic") return gridRef.current?.exportPng() ?? "/pages/sample-done.jpg";
     const line = lineRef.current;
     const paint = paintRef.current;
@@ -169,6 +200,30 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
 
   /** Saves the picture to the device. Entirely local: nothing is uploaded. */
   function download() {
+    if (isRegions) {
+      const svg = regionRef.current?.exportSvg();
+      if (!svg) return;
+      const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+      const img = new Image();
+      const save = (href: string, name: string) => {
+        const a = document.createElement("a");
+        a.href = href;
+        a.download = name;
+        a.click();
+      };
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = c.height = 1600;
+        c.getContext("2d")?.drawImage(img, 0, 0, 1600, 1600);
+        URL.revokeObjectURL(url);
+        save(c.toDataURL("image/png"), "nou-paint.png");
+      };
+      img.onerror = () => {
+        save(url, "nou-paint.svg"); // the browser could not draw it: save the SVG itself
+      };
+      img.src = url;
+      return;
+    }
     const a = document.createElement("a");
     a.href = capture();
     a.download = "nou-paint.png";
@@ -210,7 +265,10 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
     const c = cursor ?? { x: 0.5, y: 0.5 };
     const move = (dx: number, dy: number) => {
       e.preventDefault();
-      setCursor({ x: Math.min(0.98, Math.max(0.02, c.x + dx)), y: Math.min(0.98, Math.max(0.02, c.y + dy)) });
+      setCursor({
+        x: Math.min(0.98, Math.max(0.02, c.x + dx)),
+        y: Math.min(0.98, Math.max(0.02, c.y + dy)),
+      });
     };
     if (e.key === "ArrowLeft") move(-step, 0);
     else if (e.key === "ArrowRight") move(step, 0);
@@ -223,6 +281,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
   }
 
   function undo() {
+    if (isRegions) return regionRef.current?.undo();
     if (style === "mosaic") return gridRef.current?.undo();
     const paint = paintRef.current;
     const ctx = paint?.getContext("2d");
@@ -235,6 +294,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
   }
 
   function redo() {
+    if (isRegions) return regionRef.current?.redo();
     if (style === "mosaic") return gridRef.current?.redo();
     const paint = paintRef.current;
     const ctx = paint?.getContext("2d");
@@ -257,7 +317,8 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
         else undo();
       } else if (!e.ctrlKey && !e.metaKey && !e.altKey && /^[1-9]$/.test(e.key)) {
         const i = Number(e.key) - 1;
-        if (i < palette.length) setSelected(i);
+        const have = isRegions ? (regions ? colourCount(regions) : 0) : palette.length;
+        if (i < have) setSelected(i);
       }
     }
     window.addEventListener("keydown", onKey);
@@ -268,9 +329,43 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
     return <FinishScreen preview={preview} title={title} onClose={() => setFinished(false)} onDownload={download} />;
   }
 
-  const swatches = palette.length ? palette : ["#d4a39a", "#8aa090", "#6e8b82", "#c9bdd4", "#f6f1e6"];
-  const undoable = style === "mosaic" ? true : canUndo;
-  const redoable = style === "mosaic" ? true : canRedo;
+  const regionHexes = REGION_PALETTE.slice(0, Math.max(1, regions ? colourCount(regions) : 12)).map((c) => c.hex);
+  const FINISH = (
+    <button
+      type="button"
+      onClick={() => {
+        setPreview(capture());
+        setFinished(true);
+      }}
+      className={cn(
+        "grid size-16 place-items-center rounded-full bg-surface/90 shadow-[var(--shadow-border)]",
+        !isRegions && "absolute left-4 top-4",
+      )}
+      aria-label={`Finish artwork. ${progress}% painted.`}
+    >
+      <svg viewBox="0 0 36 36" className="size-14 -rotate-90" aria-hidden>
+        <circle cx="18" cy="18" r="14" fill="none" stroke="#e4d9c6" strokeWidth="3" />
+        <circle
+          cx="18"
+          cy="18"
+          r="14"
+          fill="none"
+          stroke="#80601f"
+          strokeWidth="3"
+          strokeDasharray={`${(progress / 100) * 88} 88`}
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="absolute text-xs font-semibold tabular-nums text-gold-deep">{progress}%</span>
+    </button>
+  );
+  const swatches = isRegions
+    ? regionHexes
+    : palette.length
+      ? palette
+      : ["#d4a39a", "#8aa090", "#6e8b82", "#c9bdd4", "#f6f1e6"];
+  const undoable = style === "mosaic" && !isRegions ? true : canUndo;
+  const redoable = style === "mosaic" && !isRegions ? true : canRedo;
 
   return (
     <div className="damask flex min-h-dvh flex-col">
@@ -282,7 +377,8 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
         <div className="min-w-0 flex-1 text-center">
           <h1 className="truncate font-display text-lg">{title}</h1>
           <p className="text-xs text-muted">
-            {style === "mosaic" ? "Square grid" : "Freeform"} · {page?.premium ? "Paid pack" : "Free"}
+            {isRegions ? "Numbered regions" : style === "mosaic" ? "Square grid" : "Freeform"} ·{" "}
+            {page?.premium ? "Paid pack" : "Free"}
           </p>
         </div>
         <button
@@ -297,8 +393,32 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
 
       <main id="main" className="relative mx-auto w-full max-w-4xl flex-1 px-4 pb-3">
         <div className="relative overflow-hidden rounded-[28px] bg-paper shadow-[var(--shadow-border)]">
-          <div className="relative aspect-square w-full">
-            {style === "mosaic" ? (
+          <div className={cn("relative w-full", !isRegions && "aspect-square")}>
+            {isRegions ? (
+              <div className="flex flex-col gap-2 p-3">
+                <div className="flex items-center gap-3">
+                  {FINISH}
+                  <p className="text-sm text-muted">
+                    Tap a region, or use the arrow keys and Enter. Numbers match the colours below.
+                  </p>
+                </div>
+                {regions ? (
+                  <RegionPainter
+                    ref={regionRef}
+                    regions={regions}
+                    title={title}
+                    selected={selected}
+                    strict={strict}
+                    palette={regionHexes}
+                    zoom={zoom}
+                    onProgress={setProgress}
+                    onHistory={onRegionHistory}
+                  />
+                ) : (
+                  !loadError && <p className="py-16 text-center text-muted">Loading…</p>
+                )}
+              </div>
+            ) : style === "mosaic" ? (
               <GridPainter
                 ref={gridRef}
                 pageId={pageId}
@@ -328,36 +448,16 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
                   <span
                     aria-hidden
                     className="pointer-events-none absolute size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-ink bg-surface/60"
-                    style={{ left: `${cursor.x * 100}%`, top: `${cursor.y * 100}%` }}
+                    style={{
+                      left: `${cursor.x * 100}%`,
+                      top: `${cursor.y * 100}%`,
+                    }}
                   />
                 )}
               </>
             )}
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              setPreview(capture());
-              setFinished(true);
-            }}
-            className="absolute left-4 top-4 grid size-16 place-items-center rounded-full bg-surface/90 shadow-[var(--shadow-border)]"
-            aria-label={`Finish artwork. ${progress}% painted.`}
-          >
-            <svg viewBox="0 0 36 36" className="size-14 -rotate-90" aria-hidden>
-              <circle cx="18" cy="18" r="14" fill="none" stroke="#e4d9c6" strokeWidth="3" />
-              <circle
-                cx="18"
-                cy="18"
-                r="14"
-                fill="none"
-                stroke="#80601f"
-                strokeWidth="3"
-                strokeDasharray={`${(progress / 100) * 88} 88`}
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="absolute text-xs font-semibold tabular-nums text-gold-deep">{progress}%</span>
-          </button>
+          {!isRegions && FINISH}
         </div>
         {loadError && (
           <p role="alert" className="mt-3 text-center text-sm">
@@ -379,7 +479,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
               <button
                 key={`${hex}-${i}`}
                 type="button"
-                aria-label={`Colour ${i + 1}`}
+                aria-label={isRegions ? `Colour ${i + 1}, ${REGION_PALETTE[i]?.name ?? ""}` : `Colour ${i + 1}`}
                 aria-pressed={selected === i}
                 onClick={() => setSelected(i)}
                 className={cn(
@@ -437,38 +537,43 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
                 <Plus className="size-4" aria-hidden />
               </button>
             </div>
-            <div className="flex rounded-xl bg-ink/5 p-1" role="group" aria-label="Painting style">
-              <button
-                type="button"
-                aria-pressed={style === "freeform"}
-                onClick={() => setStyle("freeform")}
-                className={cn(
-                  "inline-flex h-11 min-w-11 items-center gap-1 rounded-lg px-3 text-sm",
-                  style === "freeform" ? "bg-paper text-ink shadow-[var(--shadow-border)]" : "text-muted",
-                )}
-              >
-                <Pencil className="size-4" aria-hidden />
-                Freeform
-              </button>
-              <button
-                type="button"
-                aria-pressed={style === "mosaic"}
-                onClick={() => setStyle("mosaic")}
-                className={cn(
-                  "inline-flex h-11 min-w-11 items-center gap-1 rounded-lg px-3 text-sm",
-                  style === "mosaic" ? "bg-paper text-ink shadow-[var(--shadow-border)]" : "text-muted",
-                )}
-              >
-                <Grid2x2 className="size-4" aria-hidden />
-                Square
-              </button>
-            </div>
-            {style === "mosaic" && (
+            {!isRegions && (
+              <div className="flex rounded-xl bg-ink/5 p-1" role="group" aria-label="Painting style">
+                <button
+                  type="button"
+                  aria-pressed={style === "freeform"}
+                  onClick={() => setStyle("freeform")}
+                  className={cn(
+                    "inline-flex h-11 min-w-11 items-center gap-1 rounded-lg px-3 text-sm",
+                    style === "freeform" ? "bg-paper text-ink shadow-[var(--shadow-border)]" : "text-muted",
+                  )}
+                >
+                  <Pencil className="size-4" aria-hidden />
+                  Freeform
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={style === "mosaic"}
+                  onClick={() => setStyle("mosaic")}
+                  className={cn(
+                    "inline-flex h-11 min-w-11 items-center gap-1 rounded-lg px-3 text-sm",
+                    style === "mosaic" ? "bg-paper text-ink shadow-[var(--shadow-border)]" : "text-muted",
+                  )}
+                >
+                  <Grid2x2 className="size-4" aria-hidden />
+                  Square
+                </button>
+              </div>
+            )}
+            {(isRegions || style === "mosaic") && (
               <button
                 type="button"
                 aria-pressed={strict}
                 onClick={() => setStrict((v) => !v)}
-                className={cn("h-11 min-w-11 rounded-lg px-3 text-sm", strict ? "bg-gold/15 text-gold-deep" : "text-muted")}
+                className={cn(
+                  "h-11 min-w-11 rounded-lg px-3 text-sm",
+                  strict ? "bg-gold/15 text-gold-deep" : "text-muted",
+                )}
               >
                 {strict ? "Match numbers" : "Any colour"}
               </button>

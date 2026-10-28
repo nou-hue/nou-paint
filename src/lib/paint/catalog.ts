@@ -1,5 +1,19 @@
+import { SAMPLE_REGIONS } from "./sample";
+import type { Region } from "./regions";
+
 export type Audience = "all" | "child" | "adult";
-export type Difficulty = "easy" | "dreamy";
+/** "easy" is kept for the existing child pages; Calm, Dreamy and Intricate grade the adult pages. */
+export type Difficulty = "easy" | "calm" | "dreamy" | "intricate";
+
+export const DIFFICULTY_LABEL: Record<Difficulty, string> = {
+  easy: "Easy",
+  calm: "Calm",
+  dreamy: "Dreamy",
+  intricate: "Intricate",
+};
+
+/** "image": JPEG modes (freeform and square grid). "regions": numbered SVG region painter. */
+export type PageFormat = "image" | "regions";
 
 /**
  * A purchasable pack of premium pages. TEST DATA ONLY: the "dreamy-test" pack is
@@ -31,6 +45,13 @@ export type StudioPage = {
   id: string;
   /** Premium pages are only served by /api/page/:id to an entitled browser. Free pages are public files. */
   premium?: boolean;
+  /** How the page is painted. Defaults to "image". */
+  format?: PageFormat;
+  /**
+   * Regions built into the app, for a FREE region page. A premium region page has none:
+   * its SVG is only ever delivered by /api/page/:id to an entitled browser.
+   */
+  regions?: readonly Region[];
   /** Pack that unlocks this page (premium pages only). */
   packId?: PackId;
   /** Public image for the gallery card. For premium pages this is a small blurred teaser, never the original. */
@@ -40,7 +61,9 @@ export type StudioPage = {
   audience: Audience;
   difficulty: Difficulty;
   ready: boolean;
+  /** Public image for the gallery card (not needed for inline region pages). */
   art: string;
+  /** Where the page's image or SVG is loaded from. */
   source: string;
   colors: number;
   grid: number;
@@ -58,6 +81,20 @@ export const STUDIO_PAGES: StudioPage[] = [
     source: "/pages/sample-garden.jpg",
     colors: 10,
     grid: 28,
+  },
+  {
+    id: "shapes",
+    title: "Little garden",
+    line: "Big, calm shapes: sky, hills, cypress trees and a bird.",
+    audience: "all",
+    difficulty: "calm",
+    format: "regions",
+    regions: SAMPLE_REGIONS,
+    ready: true,
+    art: "",
+    source: "",
+    colors: 12,
+    grid: 0,
   },
   {
     id: "simorgh",
