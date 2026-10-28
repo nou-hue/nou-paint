@@ -60,6 +60,22 @@ describe("GET /api/page/:id (premium images are server-gated)", () => {
     expect(bytes.equals(readFileSync("private/pages/simorgh-paint.jpg"))).toBe(true);
   });
 
+  it("serves the line-art file with ?kind=line (to entitled visitors only), and refuses unknown kinds", async () => {
+    const line = (id: string) =>
+      handlers(PageRoute).GET({ request: new Request(`http://localhost/api/page/${id}?kind=line`), params: { pageId: id } });
+    expect((await line("simorgh")).status).toBe(403);
+    jar.set(ENT_COOKIE, makeEntitlementToken("cus_1", ["dreamy-test"]));
+    const r = await line("simorgh");
+    expect(r.status).toBe(200);
+    expect(r.headers.get("cache-control")).toContain("no-store");
+    expect(Buffer.from(await r.arrayBuffer()).equals(readFileSync("private/pages/simorgh-line.jpg"))).toBe(true);
+    const bad = await handlers(PageRoute).GET({
+      request: new Request("http://localhost/api/page/simorgh?kind=../x"),
+      params: { pageId: "simorgh" },
+    });
+    expect(bad.status).toBe(400);
+  });
+
   it("an entitlement for another pack does not unlock this one", async () => {
     jar.set(ENT_COOKIE, makeEntitlementToken("cus_1", []));
     expect((await get("simorgh")).status).toBe(403);
