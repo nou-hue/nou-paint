@@ -84,6 +84,8 @@ export function Studio({ pageId, uploadSrc }: Props) {
 function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | undefined }) {
   const title = page?.title ?? (pageId === "upload" ? "Your image" : "Studio");
   const src = uploadSrc ?? page?.source ?? "/pages/sample-garden.jpg";
+  // Freeform walls come from the page's LINE art, never from the colour (paint) image. Uploads are their own line art.
+  const wallSrc = uploadSrc ?? page?.lineSource ?? src;
   const age = useAppStore((s) => s.age) ?? "adult";
   const style = useAppStore((s) => s.style);
   const setStyle = useAppStore((s) => s.setStyle);
@@ -163,7 +165,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
     syncFreeformHistory();
     setProgress(0);
     setLoadError(false);
-    loadImage(src)
+    loadImage(wallSrc)
       .then((img) => {
         if (gone) return;
         const lctx = line.getContext("2d");
@@ -177,7 +179,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
     return () => {
       gone = true;
     };
-  }, [src, style, isRegions]);
+  }, [wallSrc, style, isRegions]);
 
   function capture() {
     if (isRegions) {

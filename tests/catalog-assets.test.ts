@@ -87,3 +87,33 @@ describe("difficulty and page formats", () => {
     }
   });
 });
+
+describe("freeform walls come from line art, not the colour image", () => {
+  const withLine = STUDIO_PAGES.filter((p) => p.lineSource);
+
+  it("each premium lineSource is the same entitlement-checked route (?kind=line)", () => {
+    for (const p of withLine.filter((x) => x.premium)) expect(p.lineSource).toBe(`/api/page/${p.id}?kind=line`);
+  });
+
+  it("each free lineSource is an existing public line file, never the paint file", () => {
+    for (const p of withLine.filter((x) => !x.premium)) {
+      expect(p.lineSource, p.id).toMatch(/^\/pages\/.+-line\.jpg$|^\/pages\/sample-garden\.jpg$/);
+      expect(existsSync(`public${p.lineSource}`), p.lineSource).toBe(true);
+      expect(p.lineSource).not.toMatch(/-paint\./);
+    }
+  });
+
+  it("every JPEG page whose colour image differs from its line art declares the line art", () => {
+    for (const p of STUDIO_PAGES.filter((x) => x.format !== "regions" && /-paint\.jpg$|^\/api\/page\//.test(x.source))) {
+      expect(p.lineSource, p.id).toBeTruthy();
+    }
+  });
+
+  it("the Studio's freeform walls are loaded from lineSource", async () => {
+    const { readFileSync } = await import("node:fs");
+    const text = readFileSync("src/components/Studio.tsx", "utf8");
+    expect(text).toMatch(/wallSrc = uploadSrc \?\? page\?\.lineSource \?\? src/);
+    expect(text).toMatch(/loadImage\(wallSrc\)/);
+    expect(text).not.toMatch(/loadImage\(src\)/);
+  });
+});

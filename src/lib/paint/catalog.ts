@@ -63,8 +63,13 @@ export type StudioPage = {
   ready: boolean;
   /** Public image for the gallery card (not needed for inline region pages). */
   art: string;
-  /** Where the page's image or SVG is loaded from. */
+  /** Where the page's image or SVG is loaded from. In Square (mosaic) mode this colour image is sampled for the palette. */
   source: string;
+  /**
+   * The line-art file Freeform painting uses for the page itself and its walls (the dark lines the fill stops at).
+   * Premium: the same entitlement-checked route (`?kind=line`). Absent = use `source`.
+   */
+  lineSource?: string;
   colors: number;
   grid: number;
 };
@@ -108,6 +113,7 @@ export const STUDIO_PAGES: StudioPage[] = [
     art: "/pages/preview/simorgh.jpg",
     teaser: "/pages/preview/simorgh.jpg",
     source: "/api/page/simorgh",
+    lineSource: "/api/page/simorgh?kind=line",
     colors: 14,
     grid: 36,
   },
@@ -120,6 +126,7 @@ export const STUDIO_PAGES: StudioPage[] = [
     ready: true,
     art: "/pages/pomegranate-paint.jpg",
     source: "/pages/pomegranate-paint.jpg",
+    lineSource: "/pages/pomegranate-line.jpg",
     colors: 8,
     grid: 22,
   },
@@ -132,6 +139,7 @@ export const STUDIO_PAGES: StudioPage[] = [
     ready: true,
     art: "/pages/nightingale-paint.jpg",
     source: "/pages/nightingale-paint.jpg",
+    lineSource: "/pages/nightingale-line.jpg",
     colors: 12,
     grid: 32,
   },
@@ -147,6 +155,7 @@ export const STUDIO_PAGES: StudioPage[] = [
     art: "/pages/preview/garden.jpg",
     teaser: "/pages/preview/garden.jpg",
     source: "/api/page/garden",
+    lineSource: "/api/page/garden?kind=line",
     colors: 14,
     grid: 36,
   },
