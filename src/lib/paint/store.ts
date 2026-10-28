@@ -16,8 +16,6 @@ type AppStore = {
   setColor: (color: string) => void;
   mosaic: number;
   setMosaic: (n: number) => void;
-  adultUnlocked: boolean;
-  unlockAdult: () => void;
 };
 
 export const useAppStore = create<AppStore>()(
@@ -33,9 +31,15 @@ export const useAppStore = create<AppStore>()(
       setColor: (color) => set({ color }),
       mosaic: 28,
       setMosaic: (n) => set({ mosaic: n }),
-      adultUnlocked: false,
-      unlockAdult: () => set({ adultUnlocked: true }),
     }),
-    { name: "nou-paint" },
+    {
+      name: "nou-paint",
+      version: 2,
+      // v1 stored a fake `adultUnlocked` flag that anyone could set from devtools. Drop it.
+      migrate: (persisted) => {
+        const { adultUnlocked: _drop, ...rest } = (persisted ?? {}) as Record<string, unknown>;
+        return rest as unknown as AppStore;
+      },
+    },
   ),
 );

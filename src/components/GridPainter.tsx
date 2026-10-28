@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { loadImage } from "@/lib/paint/engine";
 import { buildGrid, progressOf, type GridDoc } from "@/lib/paint/grid";
 import { loadFilled, saveFilled } from "@/lib/paint/save";
@@ -31,6 +31,8 @@ export const GridPainter = forwardRef<GridHandle, Props>(function GridPainter(
   const history = useRef<number[][]>([]);
   const redoStack = useRef<number[][]>([]);
   const painting = useRef(false);
+  /** Keyboard cursor (cell index), null until the canvas is focused. */
+  const [kbCell, setKbCell] = useState<number | null>(null);
 
   const paint = useCallback(() => {
     const canvas = canvasRef.current;
@@ -54,12 +56,13 @@ export const GridPainter = forwardRef<GridHandle, Props>(function GridPainter(
         ctx.fillStyle = hex;
         ctx.fillRect(x, y, cell + 0.6, cell + 0.6);
       } else {
-        ctx.fillStyle = idx === selected ? "rgba(176,138,69,0.12)" : "#f8f3ea";
+        ctx.fillStyle = idx === selected ? "rgba(128,96,31,0.16)" : "#f8f3ea";
         ctx.fillRect(x, y, cell + 0.6, cell + 0.6);
-        ctx.strokeStyle = "rgba(58,50,40,0.07)";
+        ctx.strokeStyle = "rgba(58,50,40,0.14)";
         ctx.strokeRect(x + 0.4, y + 0.4, cell - 0.8, cell - 0.8);
         if (cell >= 11) {
-          ctx.fillStyle = idx === selected ? "rgba(140,106,47,0.75)" : "rgba(58,50,40,0.38)";
+          // >= 4.5:1 on the cell background (was ~2:1)
+          ctx.fillStyle = idx === selected ? "#5c4212" : "#5a4e40";
           ctx.font = `600 ${Math.max(8, Math.floor(cell * 0.4))}px Figtree, sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
@@ -67,7 +70,16 @@ export const GridPainter = forwardRef<GridHandle, Props>(function GridPainter(
         }
       }
     }
-  }, [selected]);
+
+    if (kbCell !== null && kbCell < doc.cells.length) {
+      const c = kbCell % doc.cols;
+      const r = Math.floor(kbCell / doc.cols);
+      ctx.lineWidth = Math.max(2, cell * 0.12);
+      ctx.strokeStyle = "#3a3228";
+      ctx.strokeRect(c * cell + ctx.lineWidth / 2, r * cell + ctx.lineWidth / 2, cell - ctx.lineWidth, cell - ctx.lineWidth);
+      ctx.lineWidth = 1;
+    }
+  }, [selected, kbCell]);
 
   useEffect(() => {
     let gone = false;
@@ -164,9 +176,36 @@ export const GridPainter = forwardRef<GridHandle, Props>(function GridPainter(
     },
   }));
 
+  function onKey(e: React.KeyboardEvent<HTMLCanvasElement>) {
+    const doc = docRef.current;
+    if (!doc) return;
+    const cur = kbCell ?? 0;
+    const col = cur % doc.cols;
+    const row = Math.floor(cur / doc.cols);
+    let next = cur;
+    if (e.key === "ArrowLeft") next = col > 0 ? cur - 1 : cur;
+    else if (e.key === "ArrowRight") next = col < doc.cols - 1 ? cur + 1 : cur;
+    else if (e.key === "ArrowUp") next = row > 0 ? cur - doc.cols : cur;
+    else if (e.key === "ArrowDown") next = row < doc.rows - 1 ? cur + doc.cols : cur;
+    else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      apply(cur);
+      endStroke();
+      return;
+    } else return;
+    e.preventDefault();
+    setKbCell(next);
+  }
+
   return (
     <canvas
       ref={canvasRef}
+      tabIndex={0}
+      role="application"
+      aria-label="Colour-by-number grid. Arrow keys move between squares, Enter or Space colours the square. Number keys 1 to 9 choose a colour."
+      onKeyDown={onKey}
+      onFocus={() => setKbCell((k) => k ?? 0)}
+      onBlur={() => setKbCell(null)}
       className="h-full w-full touch-none"
       style={{ transform: `scale(${zoom / 100})`, transformOrigin: "center center" }}
       onPointerDown={(e) => {

@@ -1,0 +1,4 @@
+# Nou Paint. Kids pages and the API are not for crawlers to wander.
+User-agent: *
+Disallow: /api/
+Disallow: /studio/

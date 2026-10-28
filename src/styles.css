@@ -1,3 +1,11 @@
+/* Self-hosted fonts (npm packages, bundled by Vite): no request leaves this origin. */
+@import "@fontsource/cormorant-garamond/latin-500.css";
+@import "@fontsource/cormorant-garamond/latin-600.css";
+@import "@fontsource/cormorant-garamond/latin-500-italic.css";
+@import "@fontsource/figtree/latin-400.css";
+@import "@fontsource/figtree/latin-500.css";
+@import "@fontsource/figtree/latin-600.css";
+@import "@fontsource/great-vibes/latin-400.css";
 @import "tailwindcss";
 
 @theme {
@@ -5,16 +13,17 @@
   --color-surface: #fbf7ee;
   --color-paper: #f8f3e9;
   --color-ink: #3a3228;
-  --color-muted: #8a7d6c;
-  --color-subtle: #b3a792;
+  --color-muted: #6b5f50; /* 5.5:1 on cream (was 3.6:1) */
+  --color-subtle: #8a7d6c;
   --color-line: #e4d9c6;
-  --color-gold: #b08a45;
-  --color-gold-deep: #8c6a2f;
-  --color-accent: #b08a45;
+  --color-gold: #80601f; /* text-safe gold, 5.2:1 on cream */
+  --color-gold-fill: #9c7a37; /* decorative fills and rings only (3.8:1) */
+  --color-gold-deep: #6b4d18;
+  --color-accent: #80601f;
   --color-accent-fg: #fbf7ee;
   --color-rose: #d4a39a;
   --color-sage: #8aa090;
-  --color-teal: #6e8b82;
+  --color-teal: #3f6259;
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-script: "Great Vibes", "Cormorant Garamond", cursive;
   --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
@@ -45,6 +54,10 @@
   }
   p {
     text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-gold-deep);
+    outline-offset: 2px;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {

@@ -197,3 +197,26 @@ export function stampPencil(
 function clamp(n: number) {
   return Math.max(0, Math.min(255, Math.round(n)));
 }
+
+/**
+ * Freeform progress: share (0-100, whole number) of paintable pixels (those
+ * that are not outline ink) that now carry paint. Used for the progress ring.
+ */
+export function paintedPercent(paint: Pick<ImageData, "data">, walls: Pick<ImageData, "data">): number {
+  const pd = paint.data;
+  const wd = walls.data;
+  let paintable = 0;
+  let painted = 0;
+  for (let i = 0; i < pd.length; i += 4) {
+    if (isInk(wd[i], wd[i + 1], wd[i + 2], wd[i + 3])) continue;
+    paintable++;
+    if (pd[i + 3] > 0) painted++;
+  }
+  return paintable === 0 ? 0 : Math.min(100, Math.round((painted / paintable) * 100));
+}
+
+/** Readable label colour (ink or white) for a swatch of the given hex colour. */
+export function labelColorFor(hex: string): string {
+  const [r, g, b] = hexToRgb(hex);
+  return luma(r, g, b) > 150 ? "#3a3228" : "#ffffff";
+}
