@@ -596,3 +596,8 @@
   margin: 0 -12px;
   padding: 12px 22px 6px;
 }
+/* Square boards: never taller than what is left above the dock. */
+.board {
+  max-width: calc(100dvh - 21rem);
+  min-width: min(100%, 260px);
+}

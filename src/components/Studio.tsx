@@ -361,7 +361,6 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
       }}
       className={cn(
         "press glass-strong grid size-14 shrink-0 place-items-center rounded-full",
-        !isRegions && "absolute left-4 top-4",
       )}
       aria-label={`Finish artwork. ${progress}% painted.`}
     >
@@ -429,76 +428,79 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
       </header>
 
       <main id="main" className="relative mx-auto w-full max-w-4xl flex-1 px-3 pb-3 sm:px-4">
-        <div className="paper-frame relative overflow-hidden">
-          <div className={cn("relative w-full", !isRegions && "aspect-square")}>
-            {isRegions ? (
-              <div className="flex flex-col gap-2 p-3">
-                <div className="flex items-center gap-3">
-                  {FINISH}
-                  <p className="text-callout text-muted">
-                    Tap a shape to colour it. Numbers match the colours below.
-                  </p>
-                </div>
-                <div className="painter-box">
-                  {regions ? (
-                    <RegionPainter
-                      ref={regionRef}
-                      regions={regions}
-                      title={title}
-                      selected={selected}
-                      strict={strict}
-                      palette={regionHexes}
-                      onProgress={setProgress}
-                      onHistory={onRegionHistory}
-                      onComplete={onComplete}
-                      onColourCounts={setCounts}
-                      onZoom={setRzoom}
-                    />
-                  ) : loadError ? null : (
-                    <div className="skeleton mx-auto aspect-square h-full max-h-full rounded-[20px]" aria-label="Loading" role="status" />
-                  )}
-                </div>
-              </div>
-            ) : style === "mosaic" ? (
-              <GridPainter
-                ref={gridRef}
-                pageId={pageId}
-                src={src}
-                cols={page?.grid ?? (age === "child" ? 22 : 32)}
-                colors={page?.colors ?? (age === "child" ? 8 : 14)}
-                selected={selected}
-                strict={strict}
-                zoom={zoom}
-                onProgress={setProgress}
-                onPalette={onPalette}
-              />
-            ) : (
-              <>
-                <canvas ref={lineRef} className="absolute inset-0 h-full w-full" aria-hidden />
-                <canvas
-                  ref={paintRef}
-                  className="absolute inset-0 h-full w-full touch-none"
-                  tabIndex={0}
-                  role="application"
-                  aria-label="Freeform painting canvas. Arrow keys move the brush, Enter or Space paints the area."
-                  onPointerDown={paintAt}
-                  onKeyDown={freeformKey}
-                  onBlur={() => setCursor(null)}
-                />
-                {cursor && (
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-ink bg-surface/60"
-                    style={{
-                      left: `${cursor.x * 100}%`,
-                      top: `${cursor.y * 100}%`,
-                    }}
-                  />
-                )}
-              </>
-            )}
+        <div className="paper-frame relative overflow-hidden p-3">
+          <div className="flex items-center gap-3">
+            {FINISH}
+            <p className="text-callout text-muted">
+              {isRegions
+                ? "Tap a shape to colour it. Numbers match the colours below."
+                : style === "mosaic"
+                  ? "Tap a square to colour it. Numbers match the colours below."
+                  : "Tap an area to fill it with the colour in hand."}
+            </p>
           </div>
-          {!isRegions && FINISH}
+          {isRegions ? (
+            <div className="painter-box mt-2">
+              {regions ? (
+                <RegionPainter
+                  ref={regionRef}
+                  regions={regions}
+                  title={title}
+                  selected={selected}
+                  strict={strict}
+                  palette={regionHexes}
+                  onProgress={setProgress}
+                  onHistory={onRegionHistory}
+                  onComplete={onComplete}
+                  onColourCounts={setCounts}
+                  onZoom={setRzoom}
+                />
+              ) : loadError ? null : (
+                <div className="skeleton mx-auto aspect-square h-full max-h-full rounded-[20px]" aria-label="Loading" role="status" />
+              )}
+            </div>
+          ) : (
+            <div className="board relative mx-auto mt-2 aspect-square w-full overflow-hidden rounded-[20px]">
+              {style === "mosaic" ? (
+                <GridPainter
+                  ref={gridRef}
+                  pageId={pageId}
+                  src={src}
+                  cols={page?.grid ?? (age === "child" ? 22 : 32)}
+                  colors={page?.colors ?? (age === "child" ? 8 : 14)}
+                  selected={selected}
+                  strict={strict}
+                  zoom={zoom}
+                  onProgress={setProgress}
+                  onPalette={onPalette}
+                />
+              ) : (
+                <>
+                  <canvas ref={lineRef} className="absolute inset-0 h-full w-full" aria-hidden />
+                  <canvas
+                    ref={paintRef}
+                    className="absolute inset-0 h-full w-full touch-none"
+                    tabIndex={0}
+                    role="application"
+                    aria-label="Freeform painting canvas. Arrow keys move the brush, Enter or Space paints the area."
+                    onPointerDown={paintAt}
+                    onKeyDown={freeformKey}
+                    onBlur={() => setCursor(null)}
+                  />
+                  {cursor && (
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute size-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-ink bg-surface/60"
+                      style={{
+                        left: `${cursor.x * 100}%`,
+                        top: `${cursor.y * 100}%`,
+                      }}
+                    />
+                  )}
+                </>
+              )}
+            </div>
+          )}
         </div>
         {loadError && (
           <p role="alert" className="mt-3 text-center text-callout">
