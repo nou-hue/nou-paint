@@ -388,7 +388,6 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
       : ["#d4a39a", "#8aa090", "#6e8b82", "#c9bdd4", "#f6f1e6"];
   const undoable = style === "mosaic" && !isRegions ? true : canUndo;
   const redoable = style === "mosaic" && !isRegions ? true : canRedo;
-  const kids = age === "child";
   const zoomPct = isRegions ? Math.round(rzoom * 100) : zoom;
 
   function pick(i: number) {
