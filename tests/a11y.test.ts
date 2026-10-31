@@ -51,3 +51,30 @@ describe("touch targets are at least 44px", () => {
     expect(readFileSync("src/styles.css", "utf8")).toMatch(/:focus-visible/);
   });
 });
+
+describe("dark theme keeps AA contrast (both the OS rule and the toggle rule share one palette)", () => {
+  const darkBlock = css.slice(css.indexOf(':root[data-theme="dark"]'), css.indexOf(':root[data-theme="light"]'));
+  const osBlock = css.slice(css.indexOf("@media (prefers-color-scheme: dark)"), css.indexOf(':root[data-theme="dark"]'));
+  const dark = (name: string, block = darkBlock) => {
+    const m = block.match(new RegExp(`--color-${name}:\\s*(#[0-9a-fA-F]{6})`));
+    if (!m) throw new Error(`dark token ${name} missing`);
+    return m[1];
+  };
+  it("the OS-driven and toggle-driven palettes are identical", () => {
+    for (const t of ["bg", "surface", "paper", "ink", "muted", "gold", "gold-deep", "teal", "accent", "accent-fg", "focus"]) {
+      expect(dark(t, osBlock), t).toBe(dark(t));
+    }
+  });
+  for (const fg of ["ink", "muted", "gold", "gold-deep", "teal"]) {
+    for (const bg of ["bg", "surface", "paper"]) {
+      it(`dark: ${fg} on ${bg}`, () => expect(ratio(dark(fg), dark(bg))).toBeGreaterThanOrEqual(4.5));
+    }
+  }
+  it("dark: button text on the accent button", () => expect(ratio(dark("accent-fg"), dark("accent"))).toBeGreaterThanOrEqual(4.5));
+  it("dark: focus ring is visible against every ground (>= 3:1)", () => {
+    for (const bg of ["bg", "surface", "paper"]) expect(ratio(dark("focus"), dark(bg))).toBeGreaterThanOrEqual(3);
+  });
+  it("light: focus ring is visible against every ground (>= 3:1)", () => {
+    for (const bg of ["bg", "surface", "paper"]) expect(ratio(token("focus"), token(bg))).toBeGreaterThanOrEqual(3);
+  });
+});
