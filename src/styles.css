@@ -522,10 +522,16 @@
   border-radius: var(--radius-sheet);
   box-shadow: var(--shadow-2);
 }
-/* A square painting area plus the region controls under it: never taller than 72% of the screen. */
+/* A square painting area plus the region controls under it. It is sized so the whole studio
+   (banner, header, board, dock) fits one screen: nothing to scroll on a phone or a laptop. */
 .painter-box {
-  height: min(calc(100vw - 1.5rem - 1.5rem + 5.5rem), 72dvh);
+  height: min(calc(100vw - 3rem + 5.5rem), calc(100dvh - 24rem));
   min-height: 300px;
+}
+@media (min-width: 640px) {
+  .painter-box {
+    height: min(40rem, calc(100dvh - 18.5rem));
+  }
 }
 .dock {
   box-shadow: var(--shadow-3);
@@ -585,4 +591,8 @@
 }
 .field::placeholder {
   color: var(--color-muted);
+}
+.dock .strip {
+  margin: 0 -12px;
+  padding: 12px 22px 6px;
 }

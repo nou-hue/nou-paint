@@ -611,7 +611,7 @@ export const RegionPainter = forwardRef<RegionPainterHandle, Props>(function Reg
           {showHint && (
             <p
               data-testid="paint-hint"
-              className="anim-rise glass-strong pointer-events-none absolute bottom-3 left-1/2 w-max max-w-[88%] -translate-x-1/2 rounded-full px-4 py-2 text-center text-callout text-ink"
+              className="anim-rise glass-strong pointer-events-none absolute top-3 left-1/2 w-max max-w-[88%] -translate-x-1/2 rounded-full px-4 py-2 text-center text-callout text-ink"
               style={{ ["--i" as string]: 3 }}
             >
               Tap a numbered shape to colour it. Pinch to zoom.

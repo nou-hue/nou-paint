@@ -511,8 +511,8 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
       </main>
 
       <div className="sticky bottom-0 z-20 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4">
-        <div className="dock glass-strong mx-auto flex max-w-4xl flex-col gap-2 rounded-[28px] px-3 py-3">
-          <div className="strip" role="group" aria-label="Colours">
+        <div className="dock glass-strong mx-auto flex max-w-5xl flex-col gap-1 rounded-[28px] px-3 py-3 sm:flex-row sm:items-center sm:gap-3">
+          <div className="strip sm:min-w-0 sm:flex-1" role="group" aria-label="Colours">
             {swatches.map((hex, i) => {
               const left = isRegions ? counts?.remaining[i] : undefined;
               const done = left === 0;
@@ -546,7 +546,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
             })}
           </div>
 
-          <div className="flex flex-wrap items-center gap-1">
+          <div className="flex flex-wrap items-center gap-1 sm:shrink-0 sm:flex-nowrap">
             <button
               type="button"
               onClick={undo}
