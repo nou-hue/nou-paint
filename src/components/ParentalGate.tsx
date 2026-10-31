@@ -39,7 +39,7 @@ export function ParentalGate({ purpose, onPass, onCancel }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center bg-ink/40 px-6"
+      className="scrim anim-fade fixed inset-0 z-50 grid place-items-center px-6"
       onKeyDown={(e) => {
         if (e.key === "Escape") onCancel();
       }}
@@ -50,12 +50,12 @@ export function ParentalGate({ purpose, onPass, onCancel }: Props) {
         aria-labelledby={titleId}
         data-testid="parental-gate"
         onSubmit={submit}
-        className="w-full max-w-sm rounded-[24px] bg-surface p-6 shadow-[var(--shadow-border)]"
+        className="anim-sheet glass-strong w-full max-w-sm rounded-[32px] p-6"
       >
         <h2 id={titleId} className="font-display text-2xl">
           Grown-ups only
         </h2>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-callout text-muted">
           Please ask a grown-up to answer this before you {purpose}.
         </p>
         <label className="mt-4 block text-base font-medium" htmlFor={`${titleId}-answer`}>
@@ -73,18 +73,18 @@ export function ParentalGate({ purpose, onPass, onCancel }: Props) {
           autoComplete="off"
           aria-invalid={wrong}
           aria-describedby={wrong ? `${titleId}-err` : undefined}
-          className="mt-2 h-12 w-full rounded-md border border-ink/30 bg-paper px-3 text-lg"
+          className="field mt-2 h-12 w-full rounded-2xl px-4 text-lg"
         />
         {wrong && (
-          <p id={`${titleId}-err`} role="alert" className="mt-2 text-sm text-ink">
+          <p id={`${titleId}-err`} role="alert" className="anim-nudge mt-2 text-callout text-ink">
             That is not right. Here is a new one.
           </p>
         )}
         <div className="mt-5 flex gap-2">
-          <button type="submit" className="h-12 min-w-11 flex-1 rounded-md bg-accent px-4 text-accent-fg">
+          <button type="submit" className="press h-12 min-w-11 flex-1 rounded-full bg-accent px-4 font-semibold text-accent-fg">
             Continue
           </button>
-          <button type="button" className="h-12 min-w-11 px-4 text-sm text-muted" onClick={onCancel}>
+          <button type="button" className="press h-12 min-w-11 rounded-full px-4 text-callout text-muted" onClick={onCancel}>
             Cancel
           </button>
         </div>

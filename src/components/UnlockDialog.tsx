@@ -102,7 +102,7 @@ export function PurchasePanel({ pageId, onClose, initialInfo }: Props & { initia
 
   return (
     <div
-      className="fixed inset-0 z-40 overflow-y-auto bg-ink/40 px-4 py-8"
+      className="scrim anim-fade fixed inset-0 z-40 overflow-y-auto px-4 py-8"
       onKeyDown={(e) => {
         if (e.key === "Escape") onClose();
       }}
@@ -114,7 +114,7 @@ export function PurchasePanel({ pageId, onClose, initialInfo }: Props & { initia
         aria-modal="true"
         aria-labelledby={titleId}
         data-testid="unlock-dialog"
-        className="mx-auto w-full max-w-md rounded-[24px] bg-surface p-6 shadow-[var(--shadow-border)] outline-none"
+        className="anim-sheet glass-strong mx-auto w-full max-w-md rounded-[32px] p-6 outline-none"
       >
         <h2 id={titleId} className="font-display text-3xl">
           {loaded ? loaded.pack.title : "Unlock a pack"}
@@ -124,13 +124,13 @@ export function PurchasePanel({ pageId, onClose, initialInfo }: Props & { initia
         {info === null && <p className="mt-3 text-sm text-ink">The shop could not be reached. Please try again later.</p>}
 
         {loaded && !loaded.payments && (
-          <p className="mt-3 rounded-md bg-paper p-3 text-sm" data-testid="payments-off">
+          <p className="mt-3 rounded-2xl bg-paper p-3 text-callout" data-testid="payments-off">
             Buying is not available yet. Nothing can be charged.
           </p>
         )}
 
         {loaded && loaded.packs.includes(loaded.pack.id) && (
-          <p className="mt-3 rounded-md bg-paper p-3 text-sm">This pack is already unlocked on this device.</p>
+          <p className="mt-3 rounded-2xl bg-paper p-3 text-callout">This pack is already unlocked on this device.</p>
         )}
 
         {loaded && !loaded.packs.includes(loaded.pack.id) && (
@@ -156,7 +156,7 @@ export function PurchasePanel({ pageId, onClose, initialInfo }: Props & { initia
                 type="checkbox"
                 checked={consent}
                 onChange={(e) => setConsent(e.target.checked)}
-                className="mt-0.5 size-6 shrink-0 accent-[#80601f]"
+                className="mt-0.5 size-6 shrink-0 accent-[var(--color-accent)]"
               />
               <span>
                 {WAIVER_SEGMENTS.map((s, i) =>
@@ -181,7 +181,7 @@ export function PurchasePanel({ pageId, onClose, initialInfo }: Props & { initia
               type="button"
               disabled={!canPay}
               onClick={() => void pay()}
-              className="mt-4 h-12 w-full rounded-md bg-accent px-4 font-medium text-accent-fg disabled:cursor-not-allowed disabled:opacity-50"
+              className="press mt-4 h-12 w-full rounded-full bg-accent px-4 text-body font-semibold text-accent-fg disabled:cursor-not-allowed disabled:opacity-50"
             >
               {busy ? "Opening checkout…" : payButtonLabel(price)}
             </button>
@@ -208,9 +208,9 @@ export function PurchasePanel({ pageId, onClose, initialInfo }: Props & { initia
                     autoComplete="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-11 min-w-0 flex-1 rounded-md border border-ink/30 bg-paper px-3"
+                    className="field h-11 min-w-0 flex-1 rounded-2xl px-4"
                   />
-                  <button type="submit" className="h-11 min-w-11 rounded-md border border-ink/30 px-3 text-sm">
+                  <button type="submit" className="press h-11 min-w-11 rounded-full border border-ink/30 px-4 text-callout">
                     Send link
                   </button>
                 </div>
@@ -224,7 +224,7 @@ export function PurchasePanel({ pageId, onClose, initialInfo }: Props & { initia
           </>
         )}
 
-        <button type="button" onClick={onClose} className="mt-5 h-11 min-w-11 px-3 text-sm text-muted underline">
+        <button type="button" onClick={onClose} className="press mt-5 h-11 min-w-11 rounded-full px-3 text-callout text-muted underline">
           Not now
         </button>
       </div>

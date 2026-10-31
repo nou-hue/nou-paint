@@ -1,6 +1,7 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { DraftBanner } from "@/components/DraftBanner";
 import { IS_DRAFT_BUILD } from "@/lib/draft";
+import { THEME_COLOR, THEME_INIT_SCRIPT } from "@/lib/theme";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Nou Paint";
@@ -15,7 +16,9 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       { name: "description", content: "Dreamy Persian paint-by-numbers. Soft colouring, your way." },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
-      { name: "theme-color", content: "#f6f1e6" },
+      { name: "color-scheme", content: "light dark" },
+      { name: "theme-color", content: THEME_COLOR.light, media: "(prefers-color-scheme: light)" },
+      { name: "theme-color", content: THEME_COLOR.dark, media: "(prefers-color-scheme: dark)" },
       // Previews and dev builds must never be indexed.
       ...(IS_DRAFT_BUILD ? [{ name: "robots", content: "noindex, nofollow" }] : []),
       { name: "twitter:card", content: "summary_large_image" },
@@ -39,6 +42,8 @@ export const Route = createRootRoute({
   component: () => (
     <html lang="en-GB" suppressHydrationWarning>
       <head>
+        {/* Sets the saved theme before first paint, so there is no flash. Local display preference only. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
       <body>

@@ -411,17 +411,17 @@
 }
 
 .anim-rise {
-  animation: rise var(--dur-slow) var(--ease-soft) both;
+  animation: rise var(--dur-slow) var(--ease-soft) backwards;
   animation-delay: calc(var(--i, 0) * 70ms);
 }
 .anim-fade {
-  animation: fade var(--dur-base) linear both;
+  animation: fade var(--dur-base) linear backwards;
 }
 .anim-sheet {
-  animation: sheet-up var(--dur-slow) var(--ease-spring) both;
+  animation: sheet-up var(--dur-slow) var(--ease-spring) backwards;
 }
 .anim-pop {
-  animation: pop var(--dur-base) var(--ease-spring) both;
+  animation: pop var(--dur-base) var(--ease-spring) backwards;
 }
 .anim-nudge {
   animation: nudge 360ms var(--ease-out) both;
@@ -478,4 +478,111 @@
   .skeleton::after {
     display: none;
   }
+}
+
+/* ---------------------------------------------------------------- theme toggle + celebration */
+.theme-icon {
+  transition: transform var(--dur-base) var(--ease-spring), opacity var(--dur-fast) linear;
+}
+.theme-icon-in {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.theme-icon-out {
+  opacity: 0;
+  transform: rotate(-70deg) scale(0.4);
+}
+.confetti-piece {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 9px;
+  height: 14px;
+  opacity: 0;
+  animation: confetti 1500ms var(--ease-out) both;
+  will-change: transform, opacity;
+}
+@keyframes badge-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+.celebrate-badge {
+  animation: pop var(--dur-slow) var(--ease-spring) backwards, badge-pulse 2400ms var(--ease-soft) 700ms 2;
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+/* ---------------------------------------------------------------- studio chrome */
+.paper-frame {
+  background: var(--color-paper);
+  border-radius: var(--radius-sheet);
+  box-shadow: var(--shadow-2);
+}
+/* A square painting area plus the region controls under it: never taller than 72% of the screen. */
+.painter-box {
+  height: min(calc(100vw - 1.5rem - 1.5rem + 5.5rem), 72dvh);
+  min-height: 300px;
+}
+.dock {
+  box-shadow: var(--shadow-3);
+}
+.swatch {
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.14), 0 2px 6px -1px rgb(0 0 0 / 0.25);
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+.swatch-on {
+  transform: translateY(-4px) scale(1.14);
+  box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 5.5px var(--color-ink), 0 8px 14px -4px rgb(0 0 0 / 0.4);
+}
+.swatch-on:active:not(:disabled) {
+  transform: translateY(-2px) scale(1.04);
+}
+.swatch-badge {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--color-ink);
+  color: var(--color-bg);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.strip {
+  padding-top: 10px; /* room for the lifted swatch */
+}
+.seg {
+  background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+}
+.seg-btn {
+  color: var(--color-muted);
+}
+.seg-on {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-1);
+}
+.seg-solo {
+  background: color-mix(in srgb, var(--color-gold-fill) 22%, transparent);
+  color: var(--color-ink);
+  box-shadow: none;
+}
+
+/* Inputs: soft, high contrast in both themes. */
+.field {
+  background: color-mix(in srgb, var(--color-ink) 6%, var(--color-surface));
+  color: var(--color-ink);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 28%, transparent);
+  outline-offset: 2px;
+}
+.field::placeholder {
+  color: var(--color-muted);
 }

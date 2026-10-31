@@ -1,14 +1,17 @@
 import { Link } from "@tanstack/react-router";
-import { Download, Grid2x2, Home, Lock, Minus, Pencil, Plus, Redo2, Undo2 } from "lucide-react";
+import { Check, Download, Grid2x2, Home, Lock, Maximize2, Minus, Pencil, Plus, Redo2, Undo2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Celebration } from "@/components/Celebration";
 import { FinishScreen } from "@/components/FinishScreen";
 import { GridPainter, type GridHandle } from "@/components/GridPainter";
-import { RegionPainter, type RegionPainterHandle } from "@/components/RegionPainter";
+import { RegionPainter, type ColourCounts, type RegionPainterHandle } from "@/components/RegionPainter";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { UnlockDialog } from "@/components/UnlockDialog";
 import { pageById, type StudioPage } from "@/lib/paint/catalog";
 import { REGION_PALETTE } from "@/lib/paint/palette";
 import { colourCount, parseRegionSvg, type Region } from "@/lib/paint/regions";
 import { drawContained, floodFill, floodSimilar, labelColorFor, loadImage, paintedPercent } from "@/lib/paint/engine";
+import { haptic } from "@/lib/haptics";
 import { fetchEntitlement } from "@/lib/pay/client";
 import { useAppStore } from "@/lib/paint/store";
 import { cn } from "@/lib/utils";
@@ -50,29 +53,41 @@ export function Studio({ pageId, uploadSrc }: Props) {
   if (access === "open") return <StudioInner pageId={pageId} uploadSrc={uploadSrc} page={page} />;
 
   return (
-    <main id="main" className="damask grid min-h-dvh place-items-center px-5 py-10">
-      <div className="w-full max-w-md rounded-[28px] bg-surface p-5 text-center shadow-[var(--shadow-border)]">
-        {page?.teaser && (
-          <img src={page.teaser} alt="" className="aspect-square w-full rounded-[20px] object-cover" aria-hidden />
-        )}
-        <h1 className="mt-4 font-display text-3xl">{page?.title}</h1>
+    <main id="main" className="damask relative grid min-h-dvh place-items-center px-5 py-10">
+      <ThemeToggle className="absolute right-3 top-3" />
+      <div className="card anim-sheet w-full max-w-md p-4 text-center" data-testid="paywall">
+        <div className="relative overflow-hidden rounded-[22px]">
+          {page?.teaser ? (
+            <img src={page.teaser} alt="" className="aspect-square w-full object-cover" aria-hidden />
+          ) : (
+            <div className="skeleton aspect-square w-full" aria-hidden />
+          )}
+          {access !== "checking" && (
+            <span className="glass-strong absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-caption font-semibold text-ink">
+              <Lock className="size-3.5" aria-hidden /> Paid pack
+            </span>
+          )}
+        </div>
+        <h1 className="mt-5 font-display text-4xl text-ink">{page?.title}</h1>
         {access === "checking" ? (
-          <p className="mt-2 text-muted">Checking…</p>
+          <p className="mt-2 text-callout text-muted" role="status">
+            Checking…
+          </p>
         ) : (
           <>
-            <p className="mt-2 inline-flex items-center gap-2 text-muted">
-              <Lock className="size-4" aria-hidden /> This page is part of a paid pack for grown-ups.
+            <p className="mx-auto mt-2 inline-flex items-center gap-2 text-callout text-muted">
+              This page is part of a paid pack for grown-ups.
             </p>
             <button
               type="button"
               onClick={() => setUnlockOpen(true)}
-              className="mt-5 h-12 w-full rounded-md bg-accent px-4 font-medium text-accent-fg"
+              className="press mt-5 h-12 w-full rounded-full bg-accent px-4 text-body font-semibold text-accent-fg"
             >
               Unlock (grown-ups)
             </button>
           </>
         )}
-        <Link to="/" className="mt-3 inline-flex h-11 min-w-11 items-center px-4 text-sm text-muted underline">
+        <Link to="/" className="press mt-2 inline-flex h-11 min-w-11 items-center rounded-full px-4 text-callout text-muted underline">
           Back to free pages
         </Link>
       </div>
@@ -94,6 +109,9 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
   const [selected, setSelected] = useState(0);
   const [progress, setProgress] = useState(0);
   const [zoom, setZoom] = useState(100);
+  const [rzoom, setRzoom] = useState(1);
+  const [counts, setCounts] = useState<ColourCounts | null>(null);
+  const [celebrate, setCelebrate] = useState(false);
   const [finished, setFinished] = useState(false);
   const [preview, setPreview] = useState("/pages/sample-done.jpg");
   const [strict, setStrict] = useState(age === "adult");
@@ -115,6 +133,8 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
     setPalette(hexes);
     setSelected(0);
   }, []);
+
+  const onComplete = useCallback(() => setCelebrate(true), []);
 
   const onRegionHistory = useCallback((h: { canUndo: boolean; canRedo: boolean }) => {
     setCanUndo(h.canUndo);
@@ -340,25 +360,26 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
         setFinished(true);
       }}
       className={cn(
-        "grid size-16 place-items-center rounded-full bg-surface/90 shadow-[var(--shadow-border)]",
+        "press glass-strong grid size-14 shrink-0 place-items-center rounded-full",
         !isRegions && "absolute left-4 top-4",
       )}
       aria-label={`Finish artwork. ${progress}% painted.`}
     >
-      <svg viewBox="0 0 36 36" className="size-14 -rotate-90" aria-hidden>
-        <circle cx="18" cy="18" r="14" fill="none" stroke="#e4d9c6" strokeWidth="3" />
+      <svg viewBox="0 0 36 36" className="size-12 -rotate-90" aria-hidden>
+        <circle cx="18" cy="18" r="14" fill="none" stroke="var(--color-line)" strokeWidth="3" />
         <circle
           cx="18"
           cy="18"
           r="14"
           fill="none"
-          stroke="#80601f"
+          stroke="var(--color-gold-fill)"
           strokeWidth="3"
           strokeDasharray={`${(progress / 100) * 88} 88`}
           strokeLinecap="round"
+          className="progress-arc"
         />
       </svg>
-      <span className="absolute text-xs font-semibold tabular-nums text-gold-deep">{progress}%</span>
+      <span className="num absolute text-caption font-semibold text-gold-deep">{progress}%</span>
     </button>
   );
   const swatches = isRegions
@@ -368,56 +389,75 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
       : ["#d4a39a", "#8aa090", "#6e8b82", "#c9bdd4", "#f6f1e6"];
   const undoable = style === "mosaic" && !isRegions ? true : canUndo;
   const redoable = style === "mosaic" && !isRegions ? true : canRedo;
+  const kids = age === "child";
+  const zoomPct = isRegions ? Math.round(rzoom * 100) : zoom;
+
+  function pick(i: number) {
+    if (i !== selected) haptic("select");
+    setSelected(i);
+  }
+  const zoomOut = () => (isRegions ? regionRef.current?.zoomOut() : setZoom((z) => Math.max(80, z - 10)));
+  const zoomIn = () => (isRegions ? regionRef.current?.zoomIn() : setZoom((z) => Math.min(160, z + 10)));
 
   return (
     <div className="damask flex min-h-dvh flex-col">
-      <header className="flex items-center gap-3 px-4 py-3 sm:px-6">
-        <Link to="/" className="flex min-h-11 min-w-11 items-center gap-2 text-gold-deep" aria-label="Home">
+      <header className="sticky top-0 z-20 flex items-center gap-2 px-3 py-2 sm:px-6">
+        <Link
+          to="/"
+          className="press glass flex h-11 min-w-11 items-center justify-center gap-2 rounded-full px-3 text-gold-deep"
+          aria-label="Home"
+        >
           <Home className="size-5" aria-hidden />
           <span className="hidden font-display text-xl sm:inline">Nou Paint</span>
         </Link>
         <div className="min-w-0 flex-1 text-center">
-          <h1 className="truncate font-display text-lg">{title}</h1>
-          <p className="text-xs text-muted">
+          <h1 className="truncate font-display text-xl leading-tight">{title}</h1>
+          <p className="text-caption text-muted">
             {isRegions ? "Numbered regions" : style === "mosaic" ? "Square grid" : "Freeform"} ·{" "}
             {page?.premium ? "Paid pack" : "Free"}
           </p>
         </div>
+        <ThemeToggle />
         <button
           type="button"
           onClick={download}
-          className="grid size-11 place-items-center rounded-full text-gold-deep"
+          className="press glass grid size-11 place-items-center rounded-full text-gold-deep"
           aria-label="Save picture to this device"
         >
           <Download className="size-5" aria-hidden />
         </button>
       </header>
 
-      <main id="main" className="relative mx-auto w-full max-w-4xl flex-1 px-4 pb-3">
-        <div className="relative overflow-hidden rounded-[28px] bg-paper shadow-[var(--shadow-border)]">
+      <main id="main" className="relative mx-auto w-full max-w-4xl flex-1 px-3 pb-3 sm:px-4">
+        <div className="paper-frame relative overflow-hidden">
           <div className={cn("relative w-full", !isRegions && "aspect-square")}>
             {isRegions ? (
               <div className="flex flex-col gap-2 p-3">
                 <div className="flex items-center gap-3">
                   {FINISH}
-                  <p className="text-sm text-muted">
-                    Tap a region, or use the arrow keys and Enter. Numbers match the colours below.
+                  <p className="text-callout text-muted">
+                    Tap a shape to colour it. Numbers match the colours below.
                   </p>
                 </div>
-                {regions ? (
-                  <RegionPainter
-                    ref={regionRef}
-                    regions={regions}
-                    title={title}
-                    selected={selected}
-                    strict={strict}
-                    palette={regionHexes}
-                    onProgress={setProgress}
-                    onHistory={onRegionHistory}
-                  />
-                ) : (
-                  !loadError && <p className="py-16 text-center text-muted">Loading…</p>
-                )}
+                <div className="painter-box">
+                  {regions ? (
+                    <RegionPainter
+                      ref={regionRef}
+                      regions={regions}
+                      title={title}
+                      selected={selected}
+                      strict={strict}
+                      palette={regionHexes}
+                      onProgress={setProgress}
+                      onHistory={onRegionHistory}
+                      onComplete={onComplete}
+                      onColourCounts={setCounts}
+                      onZoom={setRzoom}
+                    />
+                  ) : loadError ? null : (
+                    <div className="skeleton mx-auto aspect-square h-full max-h-full rounded-[20px]" aria-label="Loading" role="status" />
+                  )}
+                </div>
               </div>
             ) : style === "mosaic" ? (
               <GridPainter
@@ -461,7 +501,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
           {!isRegions && FINISH}
         </div>
         {loadError && (
-          <p role="alert" className="mt-3 text-center text-sm">
+          <p role="alert" className="mt-3 text-center text-callout">
             This picture could not be loaded.
           </p>
         )}
@@ -470,42 +510,48 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
         </p>
       </main>
 
-      <div className="px-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <div className="mx-auto flex max-w-4xl flex-col gap-3 rounded-[28px] bg-surface px-4 py-3 shadow-[var(--shadow-border)]">
-          <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Colours">
-            <p className="text-xs tracking-wide text-muted uppercase" aria-hidden>
-              Colours
-            </p>
-            {swatches.map((hex, i) => (
-              <button
-                key={`${hex}-${i}`}
-                type="button"
-                aria-label={isRegions ? `Colour ${i + 1}, ${REGION_PALETTE[i]?.name ?? ""}` : `Colour ${i + 1}`}
-                aria-pressed={selected === i}
-                onClick={() => setSelected(i)}
-                className={cn(
-                  "relative size-11 rounded-full shadow-[var(--shadow-border)]",
-                  selected === i && "ring-[3px] ring-ink ring-offset-2 ring-offset-surface",
-                )}
-                style={{ background: hex }}
-              >
-                <span
-                  aria-hidden
-                  className="absolute inset-0 grid place-items-center text-xs font-semibold"
-                  style={{ color: labelColorFor(hex) }}
+      <div className="sticky bottom-0 z-20 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-4">
+        <div className="dock glass-strong mx-auto flex max-w-4xl flex-col gap-2 rounded-[28px] px-3 py-3">
+          <div className="strip" role="group" aria-label="Colours">
+            {swatches.map((hex, i) => {
+              const left = isRegions ? counts?.remaining[i] : undefined;
+              const done = left === 0;
+              return (
+                <button
+                  key={`${hex}-${i}`}
+                  type="button"
+                  aria-label={
+                    (isRegions ? `Colour ${i + 1}, ${REGION_PALETTE[i]?.name ?? ""}` : `Colour ${i + 1}`) +
+                    (left === undefined ? "" : done ? ", all painted" : `, ${left} left`)
+                  }
+                  aria-pressed={selected === i}
+                  onClick={() => pick(i)}
+                  className={cn("swatch press relative size-11 rounded-full", selected === i && "swatch-on")}
+                  style={{ background: hex }}
                 >
-                  {i + 1}
-                </span>
-              </button>
-            ))}
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 grid place-items-center text-caption font-semibold"
+                    style={{ color: labelColorFor(hex) }}
+                  >
+                    {done ? <Check className="size-4" /> : i + 1}
+                  </span>
+                  {left !== undefined && !done && (
+                    <span aria-hidden className="swatch-badge num">
+                      {left}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-1">
             <button
               type="button"
               onClick={undo}
               disabled={!undoable}
-              className="grid size-11 place-items-center text-ink disabled:opacity-40"
+              className="press grid size-11 place-items-center rounded-full text-ink disabled:opacity-40"
               aria-label="Undo"
             >
               <Undo2 className="size-5" aria-hidden />
@@ -514,40 +560,39 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
               type="button"
               onClick={redo}
               disabled={!redoable}
-              className="grid size-11 place-items-center text-ink disabled:opacity-40"
+              className="press grid size-11 place-items-center rounded-full text-ink disabled:opacity-40"
               aria-label="Redo"
             >
               <Redo2 className="size-5" aria-hidden />
             </button>
-            <div className="flex items-center gap-1 text-sm tabular-nums text-muted" role="group" aria-label="Zoom">
-              <button
-                type="button"
-                className="grid size-11 place-items-center"
-                aria-label="Zoom out"
-                onClick={() => setZoom((z) => Math.max(80, z - 10))}
-              >
+            <div className="flex items-center text-callout text-muted num" role="group" aria-label="Zoom">
+              <button type="button" className="press grid size-11 place-items-center rounded-full" aria-label="Zoom out" onClick={zoomOut}>
                 <Minus className="size-4" aria-hidden />
               </button>
-              <span aria-live="polite">{zoom}%</span>
-              <button
-                type="button"
-                className="grid size-11 place-items-center"
-                aria-label="Zoom in"
-                onClick={() => setZoom((z) => Math.min(160, z + 10))}
-              >
+              <span aria-live="polite" className="min-w-10 text-center">
+                {zoomPct}%
+              </span>
+              <button type="button" className="press grid size-11 place-items-center rounded-full" aria-label="Zoom in" onClick={zoomIn}>
                 <Plus className="size-4" aria-hidden />
               </button>
+              {isRegions && rzoom > 1.02 && (
+                <button
+                  type="button"
+                  className="press grid size-11 place-items-center rounded-full"
+                  aria-label="Reset zoom"
+                  onClick={() => regionRef.current?.resetView()}
+                >
+                  <Maximize2 className="size-4" aria-hidden />
+                </button>
+              )}
             </div>
             {!isRegions && (
-              <div className="flex rounded-xl bg-ink/5 p-1" role="group" aria-label="Painting style">
+              <div className="seg flex rounded-full p-1" role="group" aria-label="Painting style">
                 <button
                   type="button"
                   aria-pressed={style === "freeform"}
                   onClick={() => setStyle("freeform")}
-                  className={cn(
-                    "inline-flex h-11 min-w-11 items-center gap-1 rounded-lg px-3 text-sm",
-                    style === "freeform" ? "bg-paper text-ink shadow-[var(--shadow-border)]" : "text-muted",
-                  )}
+                  className={cn("seg-btn press inline-flex h-11 min-w-11 items-center gap-1 rounded-full px-3 text-callout", style === "freeform" && "seg-on")}
                 >
                   <Pencil className="size-4" aria-hidden />
                   Freeform
@@ -556,10 +601,7 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
                   type="button"
                   aria-pressed={style === "mosaic"}
                   onClick={() => setStyle("mosaic")}
-                  className={cn(
-                    "inline-flex h-11 min-w-11 items-center gap-1 rounded-lg px-3 text-sm",
-                    style === "mosaic" ? "bg-paper text-ink shadow-[var(--shadow-border)]" : "text-muted",
-                  )}
+                  className={cn("seg-btn press inline-flex h-11 min-w-11 items-center gap-1 rounded-full px-3 text-callout", style === "mosaic" && "seg-on")}
                 >
                   <Grid2x2 className="size-4" aria-hidden />
                   Square
@@ -571,21 +613,29 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
                 type="button"
                 aria-pressed={strict}
                 onClick={() => setStrict((v) => !v)}
-                className={cn(
-                  "h-11 min-w-11 rounded-lg px-3 text-sm",
-                  strict ? "bg-gold/15 text-gold-deep" : "text-muted",
-                )}
+                className={cn("seg-btn press h-11 min-w-11 rounded-full px-3 text-callout", strict ? "seg-on seg-solo" : "text-muted")}
               >
                 {strict ? "Match numbers" : "Any colour"}
               </button>
             )}
             <div className="flex-1" />
-            <span className="text-sm tabular-nums text-gold-deep" aria-hidden>
+            <span className="num pr-2 text-callout font-semibold text-gold-deep" aria-hidden>
               {progress}%
             </span>
           </div>
         </div>
       </div>
+      {celebrate && (
+        <Celebration
+          title={title}
+          onKeepGoing={() => setCelebrate(false)}
+          onSee={() => {
+            setCelebrate(false);
+            setPreview(capture());
+            setFinished(true);
+          }}
+        />
+      )}
     </div>
   );
 }

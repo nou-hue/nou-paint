@@ -31,7 +31,7 @@ export function FinishScreen({ preview, title, onClose, onDownload }: Props) {
         <button
           type="button"
           onClick={onClose}
-          className="grid size-12 place-items-center rounded-full border border-gold/60 text-gold-deep"
+          className="press glass grid size-12 place-items-center rounded-full text-gold-deep"
           aria-label="Done"
         >
           <Check className="size-5" />
@@ -39,10 +39,10 @@ export function FinishScreen({ preview, title, onClose, onDownload }: Props) {
       </header>
 
       <main id="main" className="flex flex-1 flex-col items-center px-6">
-        <p className="text-xs tracking-[0.32em] text-gold uppercase">Finished artwork</p>
+        <p className="anim-rise text-overline uppercase text-gold">Finished artwork</p>
         <div className="mx-auto mt-1 h-px w-16 bg-gold/50" />
 
-        <figure className="mt-6 w-full max-w-md rounded-[28px] border border-gold/35 bg-paper p-3 shadow-[var(--shadow-border)]">
+        <figure className="anim-sheet paper-frame mt-6 w-full max-w-md p-3">
           <img
             src={preview}
             alt={title}
@@ -54,32 +54,32 @@ export function FinishScreen({ preview, title, onClose, onDownload }: Props) {
           <button
             type="button"
             onClick={onDownload}
-            className="rounded-2xl border border-gold/25 bg-surface px-3 py-4 text-center shadow-[var(--shadow-border)]"
+            className="card press px-3 py-4 text-center"
           >
             <Download className="mx-auto size-5 text-gold-deep" />
             <p className="mt-2 font-display text-lg text-gold-deep">Save</p>
-            <p className="text-xs text-muted">Saved to this device</p>
+            <p className="text-caption text-muted">Saved to this device</p>
           </button>
           <button
             type="button"
             onClick={() => void share()}
-            className="rounded-2xl border border-gold/25 bg-surface px-3 py-4 text-center shadow-[var(--shadow-border)]"
+            className="card press px-3 py-4 text-center"
           >
             <Share2 className="mx-auto size-5 text-gold-deep" />
             <p className="mt-2 font-display text-lg text-gold-deep">Share</p>
-            <p className="text-xs text-muted">Share your art</p>
+            <p className="text-caption text-muted">Share your art</p>
           </button>
           <Link
             to="/"
-            className="rounded-2xl border border-gold/25 bg-surface px-3 py-4 text-center shadow-[var(--shadow-border)]"
+            className="card press px-3 py-4 text-center"
           >
             <Feather className="mx-auto size-5 text-gold-deep" />
             <p className="mt-2 font-display text-lg text-gold-deep">New page</p>
-            <p className="text-xs text-muted">Create something new</p>
+            <p className="text-caption text-muted">Create something new</p>
           </Link>
         </div>
 
-        <p className="mt-8 text-sm tracking-wide text-gold">Your art is complete.</p>
+        <p className="mt-8 text-callout text-gold">Your art is complete.</p>
       </main>
 
       <nav className="flex items-center justify-around px-8 py-5 text-gold-deep">
