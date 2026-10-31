@@ -123,6 +123,43 @@ function authPopupPlugin(): Plugin {
   };
 }
 
+/**
+ * Security headers (applied to every response on the Vercel build via Nitro
+ * route rules). The enforced CSP only carries directives that cannot break the
+ * app (framing, base-uri, plugins, form targets). The full script/style/connect
+ * policy ships as Report-Only first; promote it to enforcing once the preview
+ * shows no violations in the browser console.
+ */
+const FULL_CSP = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+  "font-src 'self' data: https://fonts.gstatic.com",
+  "img-src 'self' data: blob: https:",
+  "media-src 'self' blob:",
+  "connect-src 'self' https://va.vercel-scripts.com https://vitals.vercel-insights.com",
+  "worker-src 'self' blob:",
+  "manifest-src 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+
+const SECURITY_HEADERS: Record<string, string> = {
+  "Strict-Transport-Security": "max-age=63072000; includeSubDomains",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Permissions-Policy":
+    "camera=(), microphone=(), geolocation=(), payment=(self), usb=(), interest-cohort=()",
+  "Cross-Origin-Opener-Policy": "same-origin-allow-popups",
+  "Content-Security-Policy":
+    "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'",
+  "Content-Security-Policy-Report-Only": FULL_CSP,
+};
+
 // `0.0.0.0:8080` is the live-preview contract — don't change host/port.
 // Keep `nitro` gated to `build` (the Vercel deploy target): enabled in dev it
 // opens a second dev-server port, which breaks the single-port preview.
@@ -135,6 +172,8 @@ export default defineConfig(({ command }) => ({
     strictPort: true,
   },
   resolve: { tsconfigPaths: true },
+  // Production builds must not ship source maps (client or server).
+  build: { sourcemap: false },
   plugins: [
     pgliteBootstrapPlugin(),
     // Before tanstackStart so /auth/popup never falls through to the SPA.
@@ -151,6 +190,11 @@ export default defineConfig(({ command }) => ({
             // manifest + head-tag middleware). Nitro v3 defaults serverDir to
             // false, so removing this silently unwires /?install=1 on deploys.
             serverDir: "./server",
+            // Never publish source maps from production builds.
+            sourcemap: false,
+            routeRules: {
+              "/**": { headers: SECURITY_HEADERS },
+            },
           }),
         ]
       : []),

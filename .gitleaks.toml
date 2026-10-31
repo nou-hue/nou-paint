@@ -1,0 +1,11 @@
+# Secret-scanning config used by `gitleaks git .` / `gitleaks dir .` (run locally or in CI).
+title = "repo gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Documented placeholders only"
+paths = [
+  '''\.env\.example$''',
+]

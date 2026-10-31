@@ -14,6 +14,12 @@ import { auth, authConfigured } from "./server";
 /** True when a real database is configured server-side. */
 const databaseConfigured = Boolean(process.env.DATABASE_URL?.trim());
 
+/** True on Vercel / serverless / production builds. */
+const hostedRuntime =
+  Boolean(process.env.VERCEL) ||
+  Boolean(process.env.AWS_LAMBDA_FUNCTION_NAME) ||
+  process.env.NODE_ENV === "production";
+
 /** Re-export so callers can branch on it without importing `server.ts`. */
 export { authConfigured };
 
@@ -88,6 +94,8 @@ export async function requireUserId(bearerToken?: string): Promise<string> {
           "refusing to fall back to the shared dev user against a real database.",
       );
     }
+    // Never share one synthetic user in a hosted runtime (Vercel/serverless).
+    if (hostedRuntime) throw new UnauthorizedError();
     return DEV_USER_ID;
   }
   const user = await getSessionUser(bearerToken);
