@@ -412,7 +412,6 @@ function StudioInner({ pageId, uploadSrc, page }: Props & { page: StudioPage | u
                     selected={selected}
                     strict={strict}
                     palette={regionHexes}
-                    zoom={zoom}
                     onProgress={setProgress}
                     onHistory={onRegionHistory}
                   />

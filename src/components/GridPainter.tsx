@@ -63,7 +63,7 @@ export const GridPainter = forwardRef<GridHandle, Props>(function GridPainter(
         if (cell >= 11) {
           // >= 4.5:1 on the cell background (was ~2:1)
           ctx.fillStyle = idx === selected ? "#5c4212" : "#5a4e40";
-          ctx.font = `600 ${Math.max(8, Math.floor(cell * 0.4))}px Figtree, sans-serif`;
+          ctx.font = `600 ${Math.max(8, Math.floor(cell * 0.4))}px "Figtree Variable", Figtree, sans-serif`;
           ctx.textAlign = "center";
           ctx.textBaseline = "middle";
           ctx.fillText(String(idx + 1), x + cell / 2, y + cell / 2 + 0.4);
