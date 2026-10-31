@@ -1,30 +1,174 @@
+/*
+ * Self-hosted fonts (npm packages, bundled by Vite): no request leaves this origin.
+ * Figtree and Cormorant Garamond are variable fonts (one small file each, every weight in between);
+ * Great Vibes is used for the logotype only.
+ */
+@import "@fontsource/great-vibes/latin-400.css";
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Figtree Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 900;
+  src: url("../node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2") format("woff2-variations");
+}
+@font-face {
+  font-family: "Cormorant Garamond Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url("../node_modules/@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-normal.woff2")
+    format("woff2-variations");
+}
+@font-face {
+  font-family: "Cormorant Garamond Variable";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 300 700;
+  src: url("../node_modules/@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-italic.woff2")
+    format("woff2-variations");
+}
+
 @theme {
+  /* ---- colour: LIGHT (default). Dark overrides follow below. ---- */
   --color-bg: #f6f1e6;
   --color-surface: #fbf7ee;
   --color-paper: #f8f3e9;
   --color-ink: #3a3228;
-  --color-muted: #8a7d6c;
-  --color-subtle: #b3a792;
+  --color-muted: #6b5f50; /* 5.5:1 on cream */
+  --color-subtle: #8a7d6c;
   --color-line: #e4d9c6;
-  --color-gold: #b08a45;
-  --color-gold-deep: #8c6a2f;
-  --color-accent: #b08a45;
+  --color-gold: #80601f; /* text-safe gold, 5.2:1 on cream */
+  --color-gold-fill: #9c7a37; /* decorative fills and rings only */
+  --color-gold-deep: #6b4d18;
+  --color-accent: #80601f;
   --color-accent-fg: #fbf7ee;
   --color-rose: #d4a39a;
   --color-sage: #8aa090;
-  --color-teal: #6e8b82;
-  --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-script: "Great Vibes", "Cormorant Garamond", cursive;
-  --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --color-teal: #3f6259;
+  --color-focus: #1d4ed8;
+  --color-scrim: #2a2218;
+  /* The artwork is always paper, in both themes: colours must read on a light ground. */
+  --color-canvas: #f7f1e8;
+  --color-canvas-ground: #f3eee6;
+  --color-canvas-ink: #2c261e;
+
+  /* ---- type: families ---- */
+  --font-display: "Cormorant Garamond Variable", "Cormorant Garamond", Georgia, serif;
+  --font-script: "Great Vibes", "Cormorant Garamond Variable", cursive;
+  --font-sans: "Figtree Variable", "Figtree", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* ---- type: a modular scale (about 1.25), fluid at the top end ---- */
+  --text-overline: 0.75rem;
+  --text-overline--line-height: 1rem;
+  --text-overline--letter-spacing: 0.18em;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.125rem;
+  --text-callout: 0.9375rem;
+  --text-callout--line-height: 1.375rem;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.6rem;
+  --text-subhead: 1.3125rem;
+  --text-subhead--line-height: 1.75rem;
+  --text-heading: 1.75rem;
+  --text-heading--line-height: 1.15;
+  --text-heading--letter-spacing: -0.012em;
+  --text-title: clamp(2.125rem, 1.6rem + 2.4vw, 3rem);
+  --text-title--line-height: 1.05;
+  --text-title--letter-spacing: -0.02em;
+  --text-display: clamp(3.75rem, 2.4rem + 7vw, 6.25rem);
+  --text-display--line-height: 0.95;
+
+  /* ---- depth ---- */
   --shadow-border: 0 0 0 1px rgb(58 50 40 / 0.06), 0 10px 28px -16px rgb(58 50 40 / 0.18);
+  --shadow-1: 0 1px 2px rgb(42 34 24 / 0.08), 0 0 0 1px rgb(42 34 24 / 0.05);
+  --shadow-2: 0 1px 2px rgb(42 34 24 / 0.06), 0 8px 24px -10px rgb(42 34 24 / 0.22), 0 0 0 1px rgb(42 34 24 / 0.05);
+  --shadow-3: 0 2px 4px rgb(42 34 24 / 0.06), 0 24px 60px -20px rgb(42 34 24 / 0.4), 0 0 0 1px rgb(42 34 24 / 0.06);
+  --shadow-paper: 0 1px 0 rgb(255 255 255 / 0.6) inset, 0 2px 6px rgb(42 34 24 / 0.1), 0 30px 60px -24px rgb(42 34 24 / 0.45);
+
+  --radius-sheet: 28px;
+}
+
+/* ---------------------------------------------------------------- dark theme */
+/* Two selectors, one palette: the OS preference (unless the visitor chose light) and the explicit toggle. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --color-bg: #14110d;
+    --color-surface: #201b15;
+    --color-paper: #2a241c;
+    --color-ink: #f3ebdc;
+    --color-muted: #c2b59f;
+    --color-subtle: #9a8d78;
+    --color-line: #3b3328;
+    --color-gold: #e3bc6a;
+    --color-gold-fill: #b98f3f;
+    --color-gold-deep: #f2d28f;
+    --color-accent: #e3bc6a;
+    --color-accent-fg: #1b1409;
+    --color-teal: #8fc4b4;
+    --color-focus: #8ab4ff;
+    --color-scrim: #000000;
+    --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.07), 0 10px 28px -16px rgb(0 0 0 / 0.6);
+    --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(255 255 255 / 0.06);
+    --shadow-2: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px -10px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.07);
+    --shadow-3: 0 2px 4px rgb(0 0 0 / 0.4), 0 28px 64px -20px rgb(0 0 0 / 0.85), 0 0 0 1px rgb(255 255 255 / 0.08);
+    --shadow-paper: 0 1px 0 rgb(255 255 255 / 0.5) inset, 0 2px 6px rgb(0 0 0 / 0.5), 0 30px 60px -24px rgb(0 0 0 / 0.8);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #14110d;
+  --color-surface: #201b15;
+  --color-paper: #2a241c;
+  --color-ink: #f3ebdc;
+  --color-muted: #c2b59f;
+  --color-subtle: #9a8d78;
+  --color-line: #3b3328;
+  --color-gold: #e3bc6a;
+  --color-gold-fill: #b98f3f;
+  --color-gold-deep: #f2d28f;
+  --color-accent: #e3bc6a;
+  --color-accent-fg: #1b1409;
+  --color-teal: #8fc4b4;
+  --color-focus: #8ab4ff;
+  --color-scrim: #000000;
+  --shadow-border: 0 0 0 1px rgb(255 255 255 / 0.07), 0 10px 28px -16px rgb(0 0 0 / 0.6);
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.4), 0 0 0 1px rgb(255 255 255 / 0.06);
+  --shadow-2: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 28px -10px rgb(0 0 0 / 0.7), 0 0 0 1px rgb(255 255 255 / 0.07);
+  --shadow-3: 0 2px 4px rgb(0 0 0 / 0.4), 0 28px 64px -20px rgb(0 0 0 / 0.85), 0 0 0 1px rgb(255 255 255 / 0.08);
+  --shadow-paper: 0 1px 0 rgb(255 255 255 / 0.5) inset, 0 2px 6px rgb(0 0 0 / 0.5), 0 30px 60px -24px rgb(0 0 0 / 0.8);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------- motion tokens */
+:root {
+  /* Fallback first; real springs where CSS linear() easing exists. */
+  --ease-spring: cubic-bezier(0.2, 0.9, 0.25, 1.15);
+  --ease-soft: cubic-bezier(0.25, 0.9, 0.3, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 160ms;
+  --dur-base: 320ms;
+  --dur-slow: 640ms;
+}
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-spring: linear(0, 0.1659, 0.4816, 0.7709, 0.9642, 1.0592, 1.0835, 1.0698, 1.0435, 1.0193, 1.0031, 0.9951, 0.993, 0.9942, 0.9964, 0.9984, 0.9997, 1.0004, 1.0006, 1.0005, 1.0003, 1.0001, 1, 1, 1);
+    --ease-soft: linear(0, 0.0955, 0.2909, 0.4982, 0.6759, 0.8104, 0.9028, 0.9607, 0.9933, 1.0091, 1.0147, 1.0147, 1.0122, 1.0091, 1.0061, 1.0038, 1.0021, 1.001, 1.0003, 0.9999, 0.9998, 0.9998, 0.9998, 0.9998, 1);
+  }
 }
 
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+    color-scheme: light;
   }
   html,
   body,
@@ -36,38 +180,424 @@
     background: var(--color-bg);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-feature-settings: "kern", "liga", "calt";
   }
   h1,
   h2,
   h3 {
     text-wrap: balance;
     font-family: var(--font-display);
+    font-weight: 600;
+    font-optical-sizing: auto;
   }
   p {
     text-wrap: pretty;
   }
+  :focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
   button:not(:disabled),
-  [role="button"]:not(:disabled) {
+  [role="button"]:not(:disabled),
+  summary {
     cursor: pointer;
+  }
+  button,
+  a {
+    touch-action: manipulation;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--color-gold-fill) 35%, transparent);
   }
 }
 
 .font-script {
   font-family: var(--font-script);
 }
-
-.damask {
-  background-color: var(--color-bg);
-  background-image: radial-gradient(circle at 20% 10%, rgb(176 138 69 / 0.06), transparent 32%),
-    radial-gradient(circle at 80% 90%, rgb(176 138 69 / 0.05), transparent 28%);
+.num {
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
+/* Warm paper-light backdrop (a soft gradient, GPU-cheap: never animated). */
+.damask {
+  background-color: var(--color-bg);
+  background-image: radial-gradient(circle at 18% 8%, rgb(176 138 69 / 0.1), transparent 34%),
+    radial-gradient(circle at 85% 92%, rgb(176 138 69 / 0.07), transparent 30%);
+}
+
+/* ---------------------------------------------------------------- glass and depth */
+/* Solid first. Only browsers that can blur get the translucent glass. */
+.glass {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-1);
+}
+.glass-strong {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-2);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .glass {
+    background: color-mix(in srgb, var(--color-surface) 72%, transparent);
+    -webkit-backdrop-filter: blur(22px) saturate(1.7);
+    backdrop-filter: blur(22px) saturate(1.7);
+  }
+  .glass-strong {
+    background: color-mix(in srgb, var(--color-surface) 84%, transparent);
+    -webkit-backdrop-filter: blur(28px) saturate(1.8);
+    backdrop-filter: blur(28px) saturate(1.8);
+  }
+  .scrim {
+    background: color-mix(in srgb, var(--color-scrim) 38%, transparent);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+}
+.scrim {
+  background: color-mix(in srgb, var(--color-scrim) 62%, transparent);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .scrim {
+    background: color-mix(in srgb, var(--color-scrim) 38%, transparent);
+  }
+}
+
+.card {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-2);
+  border-radius: var(--radius-sheet);
+}
+.paper-sheet {
+  background: var(--color-canvas);
+  box-shadow: var(--shadow-paper);
+  border-radius: 20px;
+}
+
+/* ---------------------------------------------------------------- interaction: transform and opacity only */
+.press {
+  transition: transform var(--dur-base) var(--ease-spring), opacity var(--dur-fast) linear;
+  will-change: transform;
+}
+.press:active:not(:disabled) {
+  transform: scale(0.94);
+  transition-duration: 90ms;
+  transition-timing-function: var(--ease-out);
+}
+.lift {
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-3px);
+  }
+}
+.lift:active {
+  transform: scale(0.985);
+  transition-duration: 90ms;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 36px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  100% {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes shimmer {
+  from {
+    transform: translate3d(-100%, 0, 0);
+  }
+  to {
+    transform: translate3d(100%, 0, 0);
+  }
+}
+@keyframes bloom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes ring-out {
+  0% {
+    transform: scale(0);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  20% {
+    transform: translate3d(-5px, 0, 0);
+  }
+  40% {
+    transform: translate3d(4px, 0, 0);
+  }
+  60% {
+    transform: translate3d(-3px, 0, 0);
+  }
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+@keyframes pulse-out {
+  0% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes confetti {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(0.6);
+  }
+  12% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dx), var(--dy), 0) rotate(var(--rot)) scale(1);
+  }
+}
+@keyframes sweep {
+  from {
+    transform: translate3d(-120%, 0, 0);
+  }
+  to {
+    transform: translate3d(120%, 0, 0);
+  }
+}
+
+.anim-rise {
+  animation: rise var(--dur-slow) var(--ease-soft) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+.anim-fade {
+  animation: fade var(--dur-base) linear backwards;
+}
+.anim-sheet {
+  animation: sheet-up var(--dur-slow) var(--ease-spring) backwards;
+}
+.anim-pop {
+  animation: pop var(--dur-base) var(--ease-spring) backwards;
+}
+.anim-nudge {
+  animation: nudge 360ms var(--ease-out) both;
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-ink) 9%, transparent), transparent);
+  animation: shimmer 1.6s linear infinite;
+}
+
+/* Swatch strip: horizontal, snap, fades at the edges. */
+.strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 16px 8px;
+  margin: 0 -16px;
+  mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+.strip::-webkit-scrollbar {
+  display: none;
+}
+.strip > * {
+  scroll-snap-align: center;
+  flex: none;
+}
+
+/* ---------------------------------------------------------------- reduced motion */
+/* Nothing moves: no animation, no transition, no smooth scroll, no parallax. State changes are instant. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+    animation: none !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
   }
+  .press:active:not(:disabled),
+  .lift:hover,
+  .lift:active {
+    transform: none !important;
+  }
+  .skeleton::after {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- theme toggle + celebration */
+.theme-icon {
+  transition: transform var(--dur-base) var(--ease-spring), opacity var(--dur-fast) linear;
+}
+.theme-icon-in {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+.theme-icon-out {
+  opacity: 0;
+  transform: rotate(-70deg) scale(0.4);
+}
+.confetti-piece {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 9px;
+  height: 14px;
+  opacity: 0;
+  animation: confetti 1500ms var(--ease-out) both;
+  will-change: transform, opacity;
+}
+@keyframes badge-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.08);
+  }
+}
+.celebrate-badge {
+  animation: pop var(--dur-slow) var(--ease-spring) backwards, badge-pulse 2400ms var(--ease-soft) 700ms 2;
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+/* ---------------------------------------------------------------- studio chrome */
+.paper-frame {
+  background: var(--color-paper);
+  border-radius: var(--radius-sheet);
+  box-shadow: var(--shadow-2);
+}
+/* A square painting area plus the region controls under it. It is sized so the whole studio
+   (banner, header, board, dock) fits one screen: nothing to scroll on a phone or a laptop. */
+.painter-box {
+  height: min(calc(100vw - 3rem + 5.5rem), calc(100dvh - 24rem));
+  min-height: 300px;
+}
+@media (min-width: 640px) {
+  .painter-box {
+    height: min(40rem, calc(100dvh - 18.5rem));
+  }
+}
+.dock {
+  box-shadow: var(--shadow-3);
+}
+.swatch {
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.14), 0 2px 6px -1px rgb(0 0 0 / 0.25);
+  transition: transform var(--dur-base) var(--ease-spring);
+}
+.swatch-on {
+  transform: translateY(-4px) scale(1.14);
+  box-shadow: 0 0 0 3px var(--color-surface), 0 0 0 5.5px var(--color-ink), 0 8px 14px -4px rgb(0 0 0 / 0.4);
+}
+.swatch-on:active:not(:disabled) {
+  transform: translateY(-2px) scale(1.04);
+}
+.swatch-badge {
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--color-ink);
+  color: var(--color-bg);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+}
+.strip {
+  padding-top: 10px; /* room for the lifted swatch */
+}
+.seg {
+  background: color-mix(in srgb, var(--color-ink) 7%, transparent);
+}
+.seg-btn {
+  color: var(--color-muted);
+}
+.seg-on {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-1);
+}
+.seg-solo {
+  background: color-mix(in srgb, var(--color-gold-fill) 22%, transparent);
+  color: var(--color-ink);
+  box-shadow: none;
+}
+
+/* Inputs: soft, high contrast in both themes. */
+.field {
+  background: color-mix(in srgb, var(--color-ink) 6%, var(--color-surface));
+  color: var(--color-ink);
+  border: 1px solid color-mix(in srgb, var(--color-ink) 28%, transparent);
+  outline-offset: 2px;
+}
+.field::placeholder {
+  color: var(--color-muted);
+}
+.dock .strip {
+  margin: 0 -12px;
+  padding: 12px 22px 6px;
+}
+/* Square boards: never taller than what is left above the dock. */
+.board {
+  max-width: calc(100dvh - 21rem);
+  min-width: min(100%, 260px);
 }

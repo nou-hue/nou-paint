@@ -10,3 +10,4 @@ artifacts
 attachments
 screenshots
 .grok
+!.env.example

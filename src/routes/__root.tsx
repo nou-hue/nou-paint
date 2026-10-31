@@ -1,6 +1,7 @@
 import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
-import { AuthProvider } from "@/lib/auth/provider";
-import { PreviewHostBridge } from "@/components/preview-host-bridge";
+import { DraftBanner } from "@/components/DraftBanner";
+import { IS_DRAFT_BUILD } from "@/lib/draft";
+import { THEME_COLOR, THEME_INIT_SCRIPT } from "@/lib/theme";
 import appCss from "../styles.css?url";
 
 const APP_NAME = "Nou Paint";
@@ -15,7 +16,11 @@ export const Route = createRootRoute({
       { title: APP_NAME },
       { name: "description", content: "Dreamy Persian paint-by-numbers. Soft colouring, your way." },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
-      { name: "theme-color", content: "#f6f1e6" },
+      { name: "color-scheme", content: "light dark" },
+      { name: "theme-color", content: THEME_COLOR.light, media: "(prefers-color-scheme: light)" },
+      { name: "theme-color", content: THEME_COLOR.dark, media: "(prefers-color-scheme: dark)" },
+      // Previews and dev builds must never be indexed.
+      ...(IS_DRAFT_BUILD ? [{ name: "robots", content: "noindex, nofollow" }] : []),
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:type", content: "website" },
       { property: "og:title", content: APP_NAME },
@@ -30,24 +35,26 @@ export const Route = createRootRoute({
     links: [
       { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
       { rel: "stylesheet", href: appCss },
-      { rel: "manifest", href: "/__grok/manifest.webmanifest" },
-      { rel: "apple-touch-icon", href: "/__grok/icon-180.png" },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Figtree:wght@400;500;600&family=Great+Vibes&display=swap",
-      },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/icons/apple-touch-icon.png" },
     ],
   }),
   component: () => (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en-GB" suppressHydrationWarning>
       <head>
+        {/* Sets the saved theme before first paint, so there is no flash. Local display preference only. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <HeadContent />
       </head>
       <body>
-        <PreviewHostBridge />
-        <AuthProvider>
-          <Outlet />
-        </AuthProvider>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-surface focus:px-4 focus:py-3 focus:text-ink"
+        >
+          Skip to content
+        </a>
+        <DraftBanner />
+        <Outlet />
         <Scripts />
       </body>
     </html>

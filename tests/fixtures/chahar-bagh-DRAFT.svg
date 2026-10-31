@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800">
+<title>Chahar Bagh - DRAFT SAMPLE, not for release</title>
+<desc>Structure test for Nou Paint region format. Original hand-coded geometry. Region = path id + number n (palette index) + label anchor cx,cy. Later paths sit on top of earlier ones (no holes).</desc>
+<rect width="800" height="800" fill="#f3eee6"/>
+<path id="border-n" data-n="8" d="M60 60L740 60L700 100L100 100Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="border-e" data-n="8" d="M740 60L740 740L700 700L700 100Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="border-s" data-n="8" d="M740 740L60 740L100 700L700 700Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="border-w" data-n="8" d="M60 740L60 60L100 100L100 700Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="channel-n" data-n="3" d="M382 100L418 100L418 360L382 360Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="channel-s" data-n="3" d="M382 440L418 440L418 700L382 700Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="channel-w" data-n="3" d="M100 382L360 382L360 418L100 418Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="channel-e" data-n="3" d="M440 382L700 382L700 418L440 418Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-lawn" data-n="2" d="M100 100L382 100L382 382L100 382Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-panel" data-n="5" d="M124 124L358 124L358 358L124 358Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-corner0" data-n="6" d="M152 132L172 152L152 172L132 152Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-corner1" data-n="6" d="M330 132L350 152L330 172L310 152Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-corner2" data-n="6" d="M330 310L350 330L330 350L310 330Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-corner3" data-n="6" d="M152 310L172 330L152 350L132 330Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-ring" data-n="4" d="M163 241a78 78 0 1 0 156 0a78 78 0 1 0 -156 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-inner" data-n="5" d="M183 241a58 58 0 1 0 116 0a58 58 0 1 0 -116 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal0" data-n="1" d="M241 225Q228 206 241 187Q254 206 241 225Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal1" data-n="1" d="M252.3 229.7Q256.6 207.1 279.2 202.8Q274.9 225.4 252.3 229.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal2" data-n="1" d="M257 241Q276 228 295 241Q276 254 257 241Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal3" data-n="1" d="M252.3 252.3Q274.9 256.6 279.2 279.2Q256.6 274.9 252.3 252.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal4" data-n="1" d="M241 257Q254 276 241 295Q228 276 241 257Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal5" data-n="1" d="M229.7 252.3Q225.4 274.9 202.8 279.2Q207.1 256.6 229.7 252.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal6" data-n="1" d="M225 241Q206 254 187 241Q206 228 225 241Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-petal7" data-n="1" d="M229.7 229.7Q207.1 225.4 202.8 202.8Q225.4 207.1 229.7 229.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="nw-heart" data-n="6" d="M227 241a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-lawn" data-n="2" d="M418 100L700 100L700 382L418 382Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-panel" data-n="5" d="M442 124L676 124L676 358L442 358Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-corner0" data-n="6" d="M470 132L490 152L470 172L450 152Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-corner1" data-n="6" d="M648 132L668 152L648 172L628 152Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-corner2" data-n="6" d="M648 310L668 330L648 350L628 330Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-corner3" data-n="6" d="M470 310L490 330L470 350L450 330Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-ring" data-n="4" d="M481 241a78 78 0 1 0 156 0a78 78 0 1 0 -156 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-inner" data-n="5" d="M501 241a58 58 0 1 0 116 0a58 58 0 1 0 -116 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal0" data-n="1" d="M559 225Q546 206 559 187Q572 206 559 225Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal1" data-n="1" d="M570.3 229.7Q574.6 207.1 597.2 202.8Q592.9 225.4 570.3 229.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal2" data-n="1" d="M575 241Q594 228 613 241Q594 254 575 241Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal3" data-n="1" d="M570.3 252.3Q592.9 256.6 597.2 279.2Q574.6 274.9 570.3 252.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal4" data-n="1" d="M559 257Q572 276 559 295Q546 276 559 257Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal5" data-n="1" d="M547.7 252.3Q543.4 274.9 520.8 279.2Q525.1 256.6 547.7 252.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal6" data-n="1" d="M543 241Q524 254 505 241Q524 228 543 241Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-petal7" data-n="1" d="M547.7 229.7Q525.1 225.4 520.8 202.8Q543.4 207.1 547.7 229.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="ne-heart" data-n="6" d="M545 241a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-lawn" data-n="2" d="M100 418L382 418L382 700L100 700Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-panel" data-n="5" d="M124 442L358 442L358 676L124 676Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-corner0" data-n="6" d="M152 450L172 470L152 490L132 470Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-corner1" data-n="6" d="M330 450L350 470L330 490L310 470Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-corner2" data-n="6" d="M330 628L350 648L330 668L310 648Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-corner3" data-n="6" d="M152 628L172 648L152 668L132 648Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-ring" data-n="4" d="M163 559a78 78 0 1 0 156 0a78 78 0 1 0 -156 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-inner" data-n="5" d="M183 559a58 58 0 1 0 116 0a58 58 0 1 0 -116 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal0" data-n="1" d="M241 543Q228 524 241 505Q254 524 241 543Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal1" data-n="1" d="M252.3 547.7Q256.6 525.1 279.2 520.8Q274.9 543.4 252.3 547.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal2" data-n="1" d="M257 559Q276 546 295 559Q276 572 257 559Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal3" data-n="1" d="M252.3 570.3Q274.9 574.6 279.2 597.2Q256.6 592.9 252.3 570.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal4" data-n="1" d="M241 575Q254 594 241 613Q228 594 241 575Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal5" data-n="1" d="M229.7 570.3Q225.4 592.9 202.8 597.2Q207.1 574.6 229.7 570.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal6" data-n="1" d="M225 559Q206 572 187 559Q206 546 225 559Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-petal7" data-n="1" d="M229.7 547.7Q207.1 543.4 202.8 520.8Q225.4 525.1 229.7 547.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="sw-heart" data-n="6" d="M227 559a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-lawn" data-n="2" d="M418 418L700 418L700 700L418 700Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-panel" data-n="5" d="M442 442L676 442L676 676L442 676Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-corner0" data-n="6" d="M470 450L490 470L470 490L450 470Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-corner1" data-n="6" d="M648 450L668 470L648 490L628 470Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-corner2" data-n="6" d="M648 628L668 648L648 668L628 648Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-corner3" data-n="6" d="M470 628L490 648L470 668L450 648Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-ring" data-n="4" d="M481 559a78 78 0 1 0 156 0a78 78 0 1 0 -156 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-inner" data-n="5" d="M501 559a58 58 0 1 0 116 0a58 58 0 1 0 -116 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal0" data-n="1" d="M559 543Q546 524 559 505Q572 524 559 543Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal1" data-n="1" d="M570.3 547.7Q574.6 525.1 597.2 520.8Q592.9 543.4 570.3 547.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal2" data-n="1" d="M575 559Q594 546 613 559Q594 572 575 559Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal3" data-n="1" d="M570.3 570.3Q592.9 574.6 597.2 597.2Q574.6 592.9 570.3 570.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal4" data-n="1" d="M559 575Q572 594 559 613Q546 594 559 575Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal5" data-n="1" d="M547.7 570.3Q543.4 592.9 520.8 597.2Q525.1 574.6 547.7 570.3Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal6" data-n="1" d="M543 559Q524 572 505 559Q524 546 543 559Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-petal7" data-n="1" d="M547.7 547.7Q525.1 543.4 520.8 520.8Q543.4 525.1 547.7 547.7Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="se-heart" data-n="6" d="M545 559a14 14 0 1 0 28 0a14 14 0 1 0 -28 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="pool-outer" data-n="3" d="M459.1 424.5L424.5 459.1L375.5 459.1L340.9 424.5L340.9 375.5L375.5 340.9L424.5 340.9L459.1 375.5Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="pool-rim" data-n="4" d="M444.3 418.4L418.4 444.3L381.6 444.3L355.7 418.4L355.7 381.6L381.6 355.7L418.4 355.7L444.3 381.6Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="pool-inner" data-n="7" d="M429.6 412.2L412.2 429.6L387.8 429.6L370.4 412.2L370.4 387.8L387.8 370.4L412.2 370.4L429.6 387.8Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<path id="fountain" data-n="5" d="M388 400a12 12 0 1 0 24 0a12 12 0 1 0 -24 0Z" fill="#f7f1e8" stroke="#2c261e" stroke-width="2.2" stroke-linejoin="round"/>
+<text x="400" y="80" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">8</text>
+<text x="720" y="400" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">8</text>
+<text x="400" y="720" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">8</text>
+<text x="80" y="400" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">8</text>
+<text x="400" y="230" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">3</text>
+<text x="400" y="570" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">3</text>
+<text x="230" y="400" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">3</text>
+<text x="570" y="400" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">3</text>
+<text x="112" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">2</text>
+<text x="150" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">5</text>
+<text x="152" y="152" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="330" y="152" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="330" y="330" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="152" y="330" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="241.0" y="173.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">4</text>
+<text x="283.5" y="258.6" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">5</text>
+<text x="241.0" y="205.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="266.5" y="215.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="277.0" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="266.5" y="266.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="241.0" y="277.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="215.5" y="266.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="205.0" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="215.5" y="215.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="241.0" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">6</text>
+<text x="430" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">2</text>
+<text x="468" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">5</text>
+<text x="470" y="152" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="648" y="152" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="648" y="330" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="470" y="330" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="559.0" y="173.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">4</text>
+<text x="601.5" y="258.6" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">5</text>
+<text x="559.0" y="205.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="584.5" y="215.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="595.0" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="584.5" y="266.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="559.0" y="277.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="533.5" y="266.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="523.0" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="533.5" y="215.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="559.0" y="241.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">6</text>
+<text x="112" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">2</text>
+<text x="150" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">5</text>
+<text x="152" y="470" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="330" y="470" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="330" y="648" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="152" y="648" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="241.0" y="491.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">4</text>
+<text x="283.5" y="576.6" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">5</text>
+<text x="241.0" y="523.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="266.5" y="533.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="277.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="266.5" y="584.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="241.0" y="595.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="215.5" y="584.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="205.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="215.5" y="533.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="241.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">6</text>
+<text x="430" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">2</text>
+<text x="468" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">5</text>
+<text x="470" y="470" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="648" y="470" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="648" y="648" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="470" y="648" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">6</text>
+<text x="559.0" y="491.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">4</text>
+<text x="601.5" y="576.6" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">5</text>
+<text x="559.0" y="523.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="584.5" y="533.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="595.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="584.5" y="584.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="559.0" y="595.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="533.5" y="584.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="523.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="533.5" y="533.5" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="12" font-family="Figtree, sans-serif">1</text>
+<text x="559.0" y="559.0" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">6</text>
+<text x="400" y="344" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="9" font-family="Figtree, sans-serif">3</text>
+<text x="400" y="360" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="9" font-family="Figtree, sans-serif">4</text>
+<text x="400" y="378" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="9" font-family="Figtree, sans-serif">7</text>
+<text x="400" y="400" text-anchor="middle" dominant-baseline="middle" fill="#2c261e" fill-opacity=".55" font-size="16" font-family="Figtree, sans-serif">5</text>
+<text x="400" y="776" text-anchor="middle" font-size="15" font-family="Figtree, sans-serif" fill="#a33" letter-spacing="2">DRAFT SAMPLE · NOT FOR RELEASE · FORMAT TEST ONLY</text></svg>

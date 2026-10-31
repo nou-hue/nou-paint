@@ -10,18 +10,61 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as LoginRouteImport } from './routes/login'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as UnlockRouteImport } from './routes/unlock'
+import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
+import { Route as ApiCheckoutConfirmRouteImport } from './routes/api/checkout-confirm'
+import { Route as ApiEntitlementRouteImport } from './routes/api/entitlement'
+import { Route as ApiRestoreRouteImport } from './routes/api/restore'
+import { Route as ApiRestoreRedeemRouteImport } from './routes/api/restore-redeem'
 import { Route as StudioPageIdRouteImport } from './routes/studio.$pageId'
-import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiPagePageIdRouteImport } from './routes/api/page.$pageId'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe.webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnlockRoute = UnlockRouteImport.update({
+  id: '/unlock',
+  path: '/unlock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
+  id: '/api/checkout',
+  path: '/api/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutConfirmRoute = ApiCheckoutConfirmRouteImport.update({
+  id: '/api/checkout-confirm',
+  path: '/api/checkout-confirm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiEntitlementRoute = ApiEntitlementRouteImport.update({
+  id: '/api/entitlement',
+  path: '/api/entitlement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRestoreRoute = ApiRestoreRouteImport.update({
+  id: '/api/restore',
+  path: '/api/restore',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRestoreRedeemRoute = ApiRestoreRedeemRouteImport.update({
+  id: '/api/restore-redeem',
+  path: '/api/restore-redeem',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StudioPageIdRoute = StudioPageIdRouteImport.update({
@@ -29,44 +72,118 @@ const StudioPageIdRoute = StudioPageIdRouteImport.update({
   path: '/studio/$pageId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
-  id: '/api/auth/$',
-  path: '/api/auth/$',
+const ApiPagePageIdRoute = ApiPagePageIdRouteImport.update({
+  id: '/api/page/$pageId',
+  path: '/api/page/$pageId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
+  id: '/api/stripe/webhook',
+  path: '/api/stripe/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/unlock': typeof UnlockRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/checkout-confirm': typeof ApiCheckoutConfirmRoute
+  '/api/entitlement': typeof ApiEntitlementRoute
+  '/api/restore': typeof ApiRestoreRoute
+  '/api/restore-redeem': typeof ApiRestoreRedeemRoute
   '/studio/$pageId': typeof StudioPageIdRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/page/$pageId': typeof ApiPagePageIdRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/unlock': typeof UnlockRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/checkout-confirm': typeof ApiCheckoutConfirmRoute
+  '/api/entitlement': typeof ApiEntitlementRoute
+  '/api/restore': typeof ApiRestoreRoute
+  '/api/restore-redeem': typeof ApiRestoreRedeemRoute
   '/studio/$pageId': typeof StudioPageIdRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/page/$pageId': typeof ApiPagePageIdRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/login': typeof LoginRoute
+  '/privacy': typeof PrivacyRoute
+  '/terms': typeof TermsRoute
+  '/unlock': typeof UnlockRoute
+  '/api/checkout': typeof ApiCheckoutRoute
+  '/api/checkout-confirm': typeof ApiCheckoutConfirmRoute
+  '/api/entitlement': typeof ApiEntitlementRoute
+  '/api/restore': typeof ApiRestoreRoute
+  '/api/restore-redeem': typeof ApiRestoreRedeemRoute
   '/studio/$pageId': typeof StudioPageIdRoute
-  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/api/page/$pageId': typeof ApiPagePageIdRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/studio/$pageId' | '/api/auth/$'
+  fullPaths:
+    | '/'
+    | '/privacy'
+    | '/terms'
+    | '/unlock'
+    | '/api/checkout'
+    | '/api/checkout-confirm'
+    | '/api/entitlement'
+    | '/api/restore'
+    | '/api/restore-redeem'
+    | '/studio/$pageId'
+    | '/api/page/$pageId'
+    | '/api/stripe/webhook'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/studio/$pageId' | '/api/auth/$'
-  id: '__root__' | '/' | '/login' | '/studio/$pageId' | '/api/auth/$'
+  to:
+    | '/'
+    | '/privacy'
+    | '/terms'
+    | '/unlock'
+    | '/api/checkout'
+    | '/api/checkout-confirm'
+    | '/api/entitlement'
+    | '/api/restore'
+    | '/api/restore-redeem'
+    | '/studio/$pageId'
+    | '/api/page/$pageId'
+    | '/api/stripe/webhook'
+  id:
+    | '__root__'
+    | '/'
+    | '/privacy'
+    | '/terms'
+    | '/unlock'
+    | '/api/checkout'
+    | '/api/checkout-confirm'
+    | '/api/entitlement'
+    | '/api/restore'
+    | '/api/restore-redeem'
+    | '/studio/$pageId'
+    | '/api/page/$pageId'
+    | '/api/stripe/webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
+  PrivacyRoute: typeof PrivacyRoute
+  TermsRoute: typeof TermsRoute
+  UnlockRoute: typeof UnlockRoute
+  ApiCheckoutRoute: typeof ApiCheckoutRoute
+  ApiCheckoutConfirmRoute: typeof ApiCheckoutConfirmRoute
+  ApiEntitlementRoute: typeof ApiEntitlementRoute
+  ApiRestoreRoute: typeof ApiRestoreRoute
+  ApiRestoreRedeemRoute: typeof ApiRestoreRedeemRoute
   StudioPageIdRoute: typeof StudioPageIdRoute
-  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiPagePageIdRoute: typeof ApiPagePageIdRoute
+  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,11 +195,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unlock': {
+      id: '/unlock'
+      path: '/unlock'
+      fullPath: '/unlock'
+      preLoaderRoute: typeof UnlockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout': {
+      id: '/api/checkout'
+      path: '/api/checkout'
+      fullPath: '/api/checkout'
+      preLoaderRoute: typeof ApiCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout-confirm': {
+      id: '/api/checkout-confirm'
+      path: '/api/checkout-confirm'
+      fullPath: '/api/checkout-confirm'
+      preLoaderRoute: typeof ApiCheckoutConfirmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/entitlement': {
+      id: '/api/entitlement'
+      path: '/api/entitlement'
+      fullPath: '/api/entitlement'
+      preLoaderRoute: typeof ApiEntitlementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/restore': {
+      id: '/api/restore'
+      path: '/api/restore'
+      fullPath: '/api/restore'
+      preLoaderRoute: typeof ApiRestoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/restore-redeem': {
+      id: '/api/restore-redeem'
+      path: '/api/restore-redeem'
+      fullPath: '/api/restore-redeem'
+      preLoaderRoute: typeof ApiRestoreRedeemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/studio/$pageId': {
@@ -92,11 +258,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StudioPageIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/$': {
-      id: '/api/auth/$'
-      path: '/api/auth/$'
-      fullPath: '/api/auth/$'
-      preLoaderRoute: typeof ApiAuthSplatRouteImport
+    '/api/page/$pageId': {
+      id: '/api/page/$pageId'
+      path: '/api/page/$pageId'
+      fullPath: '/api/page/$pageId'
+      preLoaderRoute: typeof ApiPagePageIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stripe/webhook': {
+      id: '/api/stripe/webhook'
+      path: '/api/stripe/webhook'
+      fullPath: '/api/stripe/webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -104,9 +277,17 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  LoginRoute: LoginRoute,
+  PrivacyRoute: PrivacyRoute,
+  TermsRoute: TermsRoute,
+  UnlockRoute: UnlockRoute,
+  ApiCheckoutRoute: ApiCheckoutRoute,
+  ApiCheckoutConfirmRoute: ApiCheckoutConfirmRoute,
+  ApiEntitlementRoute: ApiEntitlementRoute,
+  ApiRestoreRoute: ApiRestoreRoute,
+  ApiRestoreRedeemRoute: ApiRestoreRedeemRoute,
   StudioPageIdRoute: StudioPageIdRoute,
-  ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiPagePageIdRoute: ApiPagePageIdRoute,
+  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
